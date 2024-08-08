@@ -14,7 +14,7 @@ class HeartBeatServer {
     }
     start(port) {
         this.express.get("/heartbeat", (req, res) => {
-            res.send("OK");
+            res.send("We still pumpin'");
         });
         this.express.listen(port, () => {
             console.log(`Heartbeat server started on port ${port}`);
