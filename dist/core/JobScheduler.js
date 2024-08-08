@@ -3,13 +3,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.JobScheduler = void 0;
 const TimeUtils_1 = require("../utils/TimeUtils");
 const Cron_1 = require("./Cron");
+const DateService_1 = require("./DateService");
 const Job_1 = require("./Job");
 class JobScheduler {
     static create() {
-        return new JobScheduler(Cron_1.Cron.create());
+        return new JobScheduler(Cron_1.Cron.create(), DateService_1.DateService.create());
     }
-    constructor(cron) {
+    constructor(cron, dateService) {
         this.cron = cron;
+        this.dateService = dateService;
     }
     scheduleCron(cron, job) {
         this.cron.scheduleCron(cron, job.run);

@@ -1,17 +1,22 @@
 import { addTime } from "../utils/TimeUtils";
 import { TimeUnit } from "../utils/types";
 import { Cron } from "./Cron";
+import { DateService } from "./DateService";
 import { JobTest } from "./Job";
 import { IJob } from "./types";
 
 export class JobScheduler {
 
   public static create(): JobScheduler {
-    return new JobScheduler(Cron.create());
+    return new JobScheduler(
+      Cron.create(),
+      DateService.create(),
+    );
   }
   
   public constructor(
     private readonly cron: Cron,
+    private readonly dateService: DateService,
   ) { }
 
   private scheduleCron(cron: string, job: IJob): void {
