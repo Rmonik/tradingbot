@@ -18,10 +18,14 @@ export class Cron {
   }
 
   public gracefulShutdown(timeLimitMs: number): void {
+    console.log("Starting graceful shutdown, will hard shutdown in", timeLimitMs, "ms if not finished");
     Promise.race([
       this.trueGracfuleShutdown(),
       this.earlyShutdown(timeLimitMs),
-    ]).then(() => process.exit(0));
+    ]).then(() => {
+      console.log("exiting...");
+      process.exit(0);
+    });
 
   }
 

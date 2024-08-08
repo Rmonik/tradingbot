@@ -28,9 +28,8 @@ export class JobScheduler {
   }
 
   public initSchedules(): void {
-    this.scheduleCron("*/3 * * * * *", JobTest.create());
+    this.scheduleCron("*/10 * * * * *", JobTest.create());
   }
-
 
   public queueTask(job: IJob, delayms?: number): void {
     this.scheduleDate(addTime(new Date(), delayms ?? 0, TimeUnit.Milliseconds), job);

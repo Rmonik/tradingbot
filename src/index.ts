@@ -11,7 +11,9 @@ const jobScheduler = JobScheduler.create();
 jobScheduler.initSchedules();
 
 // Graceful shutdown
-const gracefulShutdownTimer = 60*1000;
+const gracefulShutdownTimer = 1*1000;    // 1 minute
 process.on("SIGINT", () => {
+  console.log("SIGINT received");
   jobScheduler.gracefulShutdown(gracefulShutdownTimer);
 });
+
