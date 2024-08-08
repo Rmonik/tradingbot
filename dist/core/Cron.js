@@ -22,5 +22,22 @@ class Cron {
     scheduleDate(date, cb) {
         (0, node_schedule_1.scheduleJob)(date, () => __awaiter(this, void 0, void 0, function* () { return yield cb(); }));
     }
+    gracefulShutdown(timeLimitMs) {
+        Promise.race([
+            this.trueGracfuleShutdown(),
+            this.earlyShutdown(timeLimitMs),
+        ]).then(() => process.exit(0));
+    }
+    trueGracfuleShutdown() {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield (0, node_schedule_1.gracefulShutdown)();
+            console.log("All jobs have finished, shutting down");
+        });
+    }
+    earlyShutdown(timeLimitMs) {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield new Promise(() => setTimeout(() => console.log("Jobs took too long to finish, cancelling all jobs and shutting down"), timeLimitMs));
+        });
+    }
 }
 exports.Cron = Cron;
