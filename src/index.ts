@@ -5,7 +5,7 @@ import { ResolutionMode } from "./core/types";
 
 // Create DI Container
 const containerManager = new ContainerManager();
-containerManager.init(ResolutionMode.Simulation);
+containerManager.init(ResolutionMode.Main);
 const container = containerManager.getContainer();
 
 // Create heartbeat server
