@@ -1,4 +1,5 @@
-import { ContainerManager } from "./core/ContainerManager";
+import { ContainerIdentifiers } from "./core/Container/ContainerIdentifiers";
+import { ContainerManager } from "./core/Container/ContainerManager";
 import { HeartBeatServer } from "./core/HeartBeatServer";
 import { JobScheduler } from "./core/JobScheduler";
 import { ResolutionMode } from "./core/types";
@@ -7,6 +8,9 @@ import { ResolutionMode } from "./core/types";
 const containerManager = new ContainerManager();
 containerManager.init(ResolutionMode.Main);
 const container = containerManager.getContainer();
+
+// generate db name
+container.bind(ContainerIdentifiers.DatabaseName).toConstantValue(`production`);
 
 // Create heartbeat server
 const port = 8888;

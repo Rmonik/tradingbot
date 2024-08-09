@@ -5,7 +5,7 @@ import { Cron } from "./Cron";
 import { DateService } from "./DateService";
 import { Job } from "./Job";
 import { IContainerManager, IJob } from "./types";
-import { ContainerIdentifiers } from "./ContainerIdentifiers";
+import { ContainerIdentifiers } from "./Container/ContainerIdentifiers";
 
 @injectable()
 export class JobScheduler {

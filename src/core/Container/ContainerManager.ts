@@ -1,8 +1,8 @@
 import { Container, injectable } from "inversify";
 import "reflect-metadata";
-import { IContainerManager, ResolutionMode } from "./types";
-import { registerSimulationContainerServices } from "../simulation/simulationContainerRegistry";
-import { isDefined } from "../utils/TypeUtils";
+import { IContainerManager, ResolutionMode } from "../types";
+import { registerSimulationContainerServices } from "../../simulation/simulationContainerRegistry";
+import { isDefined } from "../../utils/TypeUtils";
 import { registerContainerServices } from "./ContainerRegistry";
 import { ContainerIdentifiers } from "./ContainerIdentifiers";
 
