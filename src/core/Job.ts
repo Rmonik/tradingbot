@@ -3,7 +3,7 @@ import { IJob, ResolutionMode } from "./types";
 import { ContainerIdentifiers } from "./ContainerIdentifiers";
 
 @injectable()
-export class JobTest implements IJob {
+export class Job implements IJob {
 
   public constructor(
     @inject(ContainerIdentifiers.ResulotionMode) private readonly t: ResolutionMode

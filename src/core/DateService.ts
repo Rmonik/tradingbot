@@ -1,5 +1,6 @@
+import { injectable } from "inversify";
 
-
+@injectable()
 export class DateService {
 
   public static create(): DateService {

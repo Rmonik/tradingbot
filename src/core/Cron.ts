@@ -1,5 +1,7 @@
+import { injectable } from "inversify";
 import { scheduleJob, gracefulShutdown } from "node-schedule";
 
+@injectable()
 export class Cron {
 
   public static create(): Cron {

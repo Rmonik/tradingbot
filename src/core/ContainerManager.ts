@@ -1,12 +1,14 @@
-import { Container } from "inversify";
+import { Container, injectable } from "inversify";
 import "reflect-metadata";
-import { ResolutionMode } from "./types";
+import { IContainerManager, ResolutionMode } from "./types";
 import { registerSimulationContainerServices } from "../simulation/simulationContainerRegistry";
 import { isDefined } from "../utils/TypeUtils";
 import { registerContainerServices } from "./ContainerRegistry";
+import { ContainerIdentifiers } from "./ContainerIdentifiers";
 
 
-class ContainerManager {
+@injectable()
+export class ContainerManager implements IContainerManager {
 
   public constructor() { }
 
@@ -22,6 +24,7 @@ class ContainerManager {
     } else {
       this.container = container
     }
+    container.bind<IContainerManager>(ContainerIdentifiers.ContainerManager).toConstantValue(this);
   }
 
   public getContainer(): Container {
@@ -32,10 +35,6 @@ class ContainerManager {
 
 let containerManager: ContainerManager | undefined;
 
-export function initContainer(resolutionMode: ResolutionMode): void {
-  containerManager = new ContainerManager();
-  containerManager.init(resolutionMode);
-}
 
 export function getContainer(): Container {
   if(!isDefined(containerManager)) throw new Error("ContainerManager is not properly initialized");
