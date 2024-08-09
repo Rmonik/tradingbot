@@ -1,5 +1,9 @@
+import { initContainer } from "./core/ContainerManager";
 import { HeartBeatServer } from "./core/HeartBeatServer";
 import { JobScheduler } from "./core/JobScheduler";
+
+// Create DI Container
+initContainer();
 
 // Create heartbeat server
 const port = 8888;
