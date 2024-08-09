@@ -1,17 +1,16 @@
-import { IJob } from "./types";
+import { inject, injectable } from "inversify";
+import { IJob, ResolutionMode } from "./types";
+import { ContainerIdentifiers } from "./ContainerIdentifiers";
 
-
+@injectable()
 export class JobTest implements IJob {
 
-  public static create(): JobTest {
-    return new JobTest();
-  }
+  public constructor(
+    @inject(ContainerIdentifiers.ResulotionMode) private readonly t: ResolutionMode
+  ) { }
+
   public async run(): Promise<void> {
-    await Promise.resolve();
-    const d = new Date();
-    console.log("Running job");
-    await new Promise((resolve) => setTimeout(resolve, 15000));
-    console.log("Job done after", new Date().getTime() - d.getTime(), "ms");
+    console.log(this.t)
   }
   
 }

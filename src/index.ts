@@ -1,9 +1,10 @@
 import { initContainer } from "./core/ContainerManager";
 import { HeartBeatServer } from "./core/HeartBeatServer";
 import { JobScheduler } from "./core/JobScheduler";
+import { ResolutionMode } from "./core/types";
 
 // Create DI Container
-initContainer();
+initContainer(ResolutionMode.Main);
 
 // Create heartbeat server
 const port = 8888;

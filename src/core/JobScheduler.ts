@@ -1,10 +1,13 @@
+import { injectable } from "inversify";
 import { addTime } from "../utils/TimeUtils";
 import { TimeUnit } from "../utils/types";
+import { getContainer } from "./ContainerManager";
 import { Cron } from "./Cron";
 import { DateService } from "./DateService";
 import { JobTest } from "./Job";
 import { IJob } from "./types";
 
+@injectable()
 export class JobScheduler {
 
   public static create(): JobScheduler {
@@ -20,15 +23,17 @@ export class JobScheduler {
   ) { }
 
   private scheduleCron(cron: string, job: IJob): void {
-    this.cron.scheduleCron(cron, job.run);
+    this.cron.scheduleCron(cron, job.run.bind(job));
   }
 
   private scheduleDate(date: Date, job: IJob): void {
-    this.cron.scheduleDate(date, job.run);
+    this.cron.scheduleDate(date, job.run.bind(job));
   }
 
   public initSchedules(): void {
-    this.scheduleCron("*/10 * * * * *", JobTest.create());
+    const container = getContainer();
+    container.bind(JobTest).toSelf();
+    this.scheduleCron("*/10 * * * * *", container.get(JobTest));
   }
 
   public queueTask(job: IJob, delayms?: number): void {

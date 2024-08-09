@@ -1,4 +1,5 @@
 import { Container } from "inversify";
+import "reflect-metadata";
 import { ResolutionMode } from "./types";
 import { registerSimulationContainerServices } from "../simulation/simulationContainerRegistry";
 import { isDefined } from "../utils/TypeUtils";
@@ -16,7 +17,7 @@ class ContainerManager {
     registerContainerServices(container);
     if(resulotionMode === ResolutionMode.Simulation) {
       const childContainer = container.createChild();
-      registerSimulationContainerServices(container);
+      registerSimulationContainerServices(childContainer);
       this.container = childContainer;
     } else {
       this.container = container
@@ -31,11 +32,13 @@ class ContainerManager {
 
 let containerManager: ContainerManager | undefined;
 
-export function initContainer(): void {
+export function initContainer(resolutionMode: ResolutionMode): void {
   containerManager = new ContainerManager();
+  containerManager.init(resolutionMode);
 }
 
 export function getContainer(): Container {
   if(!isDefined(containerManager)) throw new Error("ContainerManager is not properly initialized");
-  return containerManager.getContainer();
+  const container = containerManager.getContainer();
+  return container;
 }
