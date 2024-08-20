@@ -1,3 +1,4 @@
+import { IPricePoint } from "../core/types.js";
 
 
 export enum TransactionType {
@@ -18,6 +19,6 @@ export interface IOrder {
 }
 
 export interface ITransactionExecutor {
-  makeTransaction(order: IOrder): Promise<void>;
+  makeTransaction(order: IOrder, pricePoint: IPricePoint): Promise<void>;
 
 }

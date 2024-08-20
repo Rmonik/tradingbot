@@ -1,4 +1,4 @@
-import { TimeUnit } from "./types"
+import { TimeUnit } from "./types.js";
 
 
 export function addTime(date: Date, time: number, units: TimeUnit): Date {

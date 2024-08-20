@@ -19,5 +19,11 @@ export interface IDatabase {
   findExtended(collection: string, filter: object, sort?: Sort, limit?: number): Promise<any[]>;
   create(collection: string, document: object ): Promise<void>;
   update(collection: string, filter: object, update: object ): Promise<void>;
+  replace(collection: string, newObj: object): Promise<void>;
   delete(collection: string, filter: object ): Promise<void>;
+}
+
+export interface IPricePoint {
+  date: Date;
+  price: number;
 }

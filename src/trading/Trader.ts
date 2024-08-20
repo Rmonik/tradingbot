@@ -1,10 +1,11 @@
 import { inject, injectable } from "inversify";
-import { IBalanceChecker, IPriceChecker, ITrader } from "./types";
-import { ITransactionExecutor } from "../transactions/types";
-import { TransactionDeterminator } from "../transactions/TransactionDeterminator";
-import { ContainerIdentifiers } from "../core/Container/ContainerIdentifiers";
-import { isDefined } from "../utils/TypeUtils";
-import { TransactionRepository } from "../transactions/TransactionRepository";
+import { ContainerIdentifiers } from "../core/Container/ContainerIdentifiers.js";
+import { TransactionDeterminator } from "../transactions/TransactionDeterminator.js";
+import { TransactionRepository } from "../transactions/TransactionRepository.js";
+import { ITransactionExecutor } from "../transactions/types.js";
+import { isDefined } from "../utils/TypeUtils.js";
+import { ITrader, IPriceChecker, IBalanceChecker } from "./types.js";
+
 
 @injectable()
 export class Trader implements ITrader {
@@ -21,7 +22,7 @@ export class Trader implements ITrader {
 
   public async trade(): Promise<void> {
     // Check price
-    const price = await this.priceChecker.checkPrice();
+    const pricePoint = await this.priceChecker.checkPrice();
   
     // Check balance
     const balance = await this.balanceChecker.checkBalance();
@@ -30,8 +31,8 @@ export class Trader implements ITrader {
     const lastTransaction = await this.transactionRepository.getLastTransaction();
 
     // Make order
-    const order = await this.transactionDeterminator.determineTransaction(price, balance.wallet, balance.fiat, lastTransaction);
-    if(isDefined(order)) await this.transactionExecutor.makeTransaction(order);
+    const order = await this.transactionDeterminator.determineTransaction(pricePoint.price, balance.wallet, balance.fiat, lastTransaction);
+    if(isDefined(order)) await this.transactionExecutor.makeTransaction(order, pricePoint);
 
   }
 }

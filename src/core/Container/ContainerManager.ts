@@ -1,10 +1,10 @@
 import { Container, injectable } from "inversify";
 import "reflect-metadata";
-import { IContainerManager, ResolutionMode } from "../types";
-import { registerSimulationContainerServices } from "../../simulation/simulationContainerRegistry";
-import { isDefined } from "../../utils/TypeUtils";
-import { registerContainerServices } from "./ContainerRegistry";
-import { ContainerIdentifiers } from "./ContainerIdentifiers";
+import { registerSimulationContainerServices } from "../../simulation/simulationContainerRegistry.js";
+import { isDefined } from "../../utils/TypeUtils.js";
+import { IContainerManager, ResolutionMode } from "../types.js";
+import { ContainerIdentifiers } from "./ContainerIdentifiers.js";
+import { registerContainerServices } from "./ContainerRegistry.js";
 
 
 @injectable()

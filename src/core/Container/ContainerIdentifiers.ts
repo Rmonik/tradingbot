@@ -7,4 +7,5 @@ export const ContainerIdentifiers = {
   TransactionExecutor: Symbol("TransactionExecutor"),
   PriceChecker: Symbol("PriceChecker"),
   BalanceChecker: Symbol("BalanceChecker"),
-} as const
+  CsvIngestor: Symbol("CsvIngestor"),
+} as const;

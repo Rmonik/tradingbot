@@ -1,8 +1,8 @@
 import { inject, injectable } from "inversify";
 import { Db, MongoClient, Sort } from "mongodb";
-import { isDefined } from "../utils/TypeUtils";
-import { ContainerIdentifiers } from "./Container/ContainerIdentifiers";
-import { IDatabase } from "./types";
+import { IDatabase } from "./types.js";
+import { isDefined } from "../utils/TypeUtils.js";
+import { ContainerIdentifiers } from "./Container/ContainerIdentifiers.js";
 
 const connection: MongoClient = new MongoClient("mongodb://localhost:27018");
 
@@ -55,7 +55,13 @@ export class Database implements IDatabase {
   public async update(collection: string, filter: object, update: object ): Promise<void> {
     const db = await this.getDb();
     const coll = db.collection(collection);
-    await coll.updateMany(filter, update);
+    await coll.updateMany(filter, { $set: update });
+  }
+
+  public async replace(collection: string, newObj: object): Promise<void> {
+    const db = await this.getDb();
+    const coll = db.collection(collection);
+    await coll.replaceOne({}, newObj);
   }
 
   public async delete(collection: string, filter: object ): Promise<void> {
@@ -63,4 +69,8 @@ export class Database implements IDatabase {
     const coll = db.collection(collection);
     await coll.deleteMany(filter);
   }
+}
+
+export async function disposeConnections() {
+  await connection.close();
 }

@@ -1,6 +1,6 @@
 import { inject, injectable } from "inversify";
-import { IJob, ResolutionMode } from "./types";
-import { ContainerIdentifiers } from "./Container/ContainerIdentifiers";
+import { IJob, ResolutionMode } from "./types.js";
+import { ContainerIdentifiers } from "./Container/ContainerIdentifiers.js";
 
 @injectable()
 export class Job implements IJob {

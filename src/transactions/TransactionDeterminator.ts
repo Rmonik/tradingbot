@@ -1,7 +1,10 @@
-import { Null } from "../utils/types";
-import { isDefined } from "../utils/TypeUtils";
-import { IOrder, ITransaction, TransactionType } from "./types";
+import { injectable } from "inversify";
+import { Null } from "../utils/types.js";
+import { isDefined } from "../utils/TypeUtils.js";
+import { ITransaction, IOrder, TransactionType } from "./types.js";
 
+
+@injectable()
 export class TransactionDeterminator {
 
   public constructor() {
@@ -11,7 +14,7 @@ export class TransactionDeterminator {
   determineTransaction(currentPrice: number, wallet: number, fiat: number, lastTransaction: Null<ITransaction>): Null<IOrder> {
     if(!isDefined(lastTransaction)) return {
       type: TransactionType.BUY,
-      amount: wallet * 0.5,
+      amount: fiat * 0.5 / currentPrice,
     }
 
     if(currentPrice > lastTransaction.price * 1.1) {
@@ -23,8 +26,8 @@ export class TransactionDeterminator {
     
     if(currentPrice < lastTransaction.price * 0.9) {
       return {
-        type: TransactionType.SELL,
-        amount: fiat * 0.1,
+        type: TransactionType.BUY,
+        amount: wallet * 0.1,
       }
     }
 

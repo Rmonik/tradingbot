@@ -1,8 +1,9 @@
-import { ContainerIdentifiers } from "./core/Container/ContainerIdentifiers";
-import { ContainerManager } from "./core/Container/ContainerManager";
-import { HeartBeatServer } from "./core/HeartBeatServer";
-import { JobScheduler } from "./core/JobScheduler";
-import { ResolutionMode } from "./core/types";
+import { ContainerIdentifiers } from "./core/Container/ContainerIdentifiers.js";
+import { ContainerManager } from "./core/Container/ContainerManager.js";
+import { HeartBeatServer } from "./core/HeartBeatServer.js";
+import { JobScheduler } from "./core/JobScheduler.js";
+import { ResolutionMode } from "./core/types.js";
+
 
 // Create DI Container
 const containerManager = new ContainerManager();

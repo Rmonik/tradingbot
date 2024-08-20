@@ -1,0 +1,6 @@
+{
+  "typescript.preferences.importModuleSpecifier": "relative", // Prefer relative paths
+  "typescript.preferences.importModuleSpecifierEnding": "js", // Add .js extension automatically
+  "javascript.preferences.importModuleSpecifier": "relative", // For JS files
+  "javascript.preferences.importModuleSpecifierEnding": "js"  // Add .js extension automatically in JS files
+}

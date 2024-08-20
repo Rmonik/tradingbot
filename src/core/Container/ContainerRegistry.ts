@@ -1,10 +1,14 @@
 import { Container } from "inversify";
-import { ContainerIdentifiers } from "../Container/ContainerIdentifiers";
-import { IDatabase, ResolutionMode } from "../types";
-import { DateService } from "../DateService";
-import { Cron } from "../Cron";
-import { Database } from "../Database";
-import { TransactionDeterminator } from "../../transactions/TransactionDeterminator";
+import { TransactionDeterminator } from "../../transactions/TransactionDeterminator.js";
+import { Cron } from "../Cron.js";
+import { CsvIngestor } from "../CsvIngestor.js";
+import { Database } from "../Database.js";
+import { DateService } from "../DateService.js";
+import { ResolutionMode, IDatabase } from "../types.js";
+import { ContainerIdentifiers } from "./ContainerIdentifiers.js";
+import { Trader } from "../../trading/Trader.js";
+import { TransactionRepository } from "../../transactions/TransactionRepository.js";
+
 
 
 export function registerContainerServices(container: Container) {
@@ -14,4 +18,7 @@ export function registerContainerServices(container: Container) {
 
   container.bind(DateService).toSelf();
   container.bind(TransactionDeterminator).toSelf();
+  container.bind(CsvIngestor).toSelf();
+  container.bind(Trader).toSelf();
+  container.bind(TransactionRepository).toSelf();
 }

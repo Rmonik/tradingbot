@@ -1,9 +1,18 @@
-import { IPriceChecker } from "../trading/types";
+import { injectable } from "inversify";
+import { IPriceChecker } from "../trading/types.js";
+import { SimulationPricesRepository } from "./SimulationPricesRepository.js";
+import { IPricePoint } from "../core/types.js";
 
-
+@injectable()
 export class PriceCheckerSimulation implements IPriceChecker {
-  public checkPrice(): Promise<number> {
-    throw new Error("Method not implemented.");
+
+  public constructor(
+    private readonly simulationPricesRepository: SimulationPricesRepository,
+  ) { }
+
+  public async checkPrice(): Promise<IPricePoint> {
+    const pricePoint = await this.simulationPricesRepository.getAndDeleteNextPrice();
+    return pricePoint;
   }
 
 }
