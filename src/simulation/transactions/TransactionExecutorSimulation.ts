@@ -1,12 +1,12 @@
 import { injectable } from "inversify";
-import { ITransactionExecutor, IOrder, TransactionType } from "../transactions/types.js";
-import { IPricePoint } from "../core/types.js";
-import { BalanceCheckerSimulation } from "./BalanceCheckerSimulation.js";
-import { BalanceRepository } from "./BalanceRepository.js";
-import { IBalance } from "../trading/types.js";
-import { IFee } from "./types.js";
-import { TransactionRepository } from "../transactions/TransactionRepository.js";
-import { SimulationConfigProvider } from "./SimulationConfigProvider.js";
+import { IPricePoint } from "../../core/types.js";
+import { IBalance } from "../../trading/types.js";
+import { TransactionRepository } from "../../transactions/TransactionRepository.js";
+import { ITransactionExecutor, IOrder, TransactionType } from "../../transactions/types.js";
+import { BalanceRepository } from "../balance/BalanceRepository.js";
+import { SimulationConfigProvider } from "../SimulationConfigProvider.js";
+import { IFee } from "../types.js";
+
 
 @injectable()
 export class TransactionExecutorSimulation implements ITransactionExecutor {

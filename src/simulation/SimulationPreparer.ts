@@ -3,7 +3,7 @@ import { ContainerIdentifiers } from "../core/Container/ContainerIdentifiers.js"
 import { CsvIngestor } from "../core/CsvIngestor.js";
 import { SimulationPricesRepository } from "./SimulationPricesRepository.js";
 import { IPricePoint } from "../core/types.js";
-import { BalanceRepository } from "./BalanceRepository.js";
+import { BalanceRepository } from "./balance/BalanceRepository.js";
 import { SimulationConfigProvider } from "./SimulationConfigProvider.js";
 
 

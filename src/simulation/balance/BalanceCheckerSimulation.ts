@@ -1,8 +1,8 @@
 
 import { injectable } from "inversify"
-import { IBalanceChecker, IBalance } from "../trading/types.js";
+import { IBalanceChecker, IBalance } from "../../trading/types.js";
 import { BalanceRepository } from "./BalanceRepository.js";
-import { isDefined } from "../utils/TypeUtils.js";
+import { isDefined } from "../../utils/TypeUtils.js";
 
 @injectable()
 export class BalanceCheckerSimulation implements IBalanceChecker {

@@ -1,9 +1,10 @@
 import { inject, injectable } from "inversify";
 import { SimulationPreparer } from "./SimulationPreparer.js";
-import { BalanceRepository } from "./BalanceRepository.js";
+import { BalanceRepository } from "./balance/BalanceRepository.js";
 import { IBalance, ITrader } from "../trading/types.js";
 import { Trader } from "../trading/Trader.js";
 import { Null } from "../utils/types.js";
+import { SimulationEndError } from "./errors/SimulationEndError.js";
 
 
 @injectable()
@@ -25,8 +26,12 @@ export class Simulator {
         await this.trader.trade();
       }
       catch (err: any) {
-        console.log(err.message);
-        break;
+        if (err instanceof SimulationEndError) {
+          console.log(err.message);
+          break;
+        } else {
+          throw err;
+        }
       }
     }
 

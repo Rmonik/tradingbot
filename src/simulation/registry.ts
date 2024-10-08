@@ -4,14 +4,14 @@ import { ResolutionMode } from "../core/types.js";
 import { PriceChecker } from "../trading/PriceChecker.js";
 import { IBalanceChecker, IPriceChecker } from "../trading/types.js";
 import { ITransactionExecutor } from "../transactions/types.js";
-import { BalanceCheckerSimulation } from "./BalanceCheckerSimulation.js";
+import { BalanceCheckerSimulation } from "./balance/BalanceCheckerSimulation.js";
 import { SimulationPreparer } from "./SimulationPreparer.js";
 import { SimulationPricesRepository } from "./SimulationPricesRepository.js";
 import { Simulator } from "./Simulator.js";
-import { TransactionExecutorSimulation } from "./TransactionExecutorSimulation.js";
-import { BalanceRepository } from "./BalanceRepository.js";
-import { PriceCheckerSimulation } from "./PriceCheckerSimulation.js";
+import { BalanceRepository } from "./balance/BalanceRepository.js";
 import { SimulationConfigProvider } from "./SimulationConfigProvider.js";
+import { PriceCheckerSimulation } from "./price/PriceCheckerSimulation.js";
+import { TransactionExecutorSimulation } from "./transactions/TransactionExecutorSimulation.js";
 
 
 

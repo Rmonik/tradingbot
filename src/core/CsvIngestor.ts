@@ -10,7 +10,6 @@ export class CsvIngestor {
 
     const buffer = await fs.readFile(filePath, { encoding: "utf8" });
     const results = await neatCsv(buffer);
-    console.log(results);
     return results as T[];
   }
 }

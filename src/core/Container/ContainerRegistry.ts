@@ -8,6 +8,7 @@ import { ResolutionMode, IDatabase } from "../types.js";
 import { ContainerIdentifiers } from "./ContainerIdentifiers.js";
 import { Trader } from "../../trading/Trader.js";
 import { TransactionRepository } from "../../transactions/TransactionRepository.js";
+import { registerTaxServices } from "../../tax/registry.js";
 
 
 
@@ -21,4 +22,7 @@ export function registerContainerServices(container: Container) {
   container.bind(CsvIngestor).toSelf();
   container.bind(Trader).toSelf();
   container.bind(TransactionRepository).toSelf();
+  
+
+  registerTaxServices(container);
 }
