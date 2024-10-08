@@ -11,7 +11,7 @@ containerManager.init(ResolutionMode.Main);
 const container = containerManager.getContainer();
 
 // generate db name
-container.bind(ContainerIdentifiers.DatabaseName).toConstantValue(`production`);
+container.bind(ContainerIdentifiers.DatabaseName).toConstantValue("production");
 
 // Create heartbeat server
 const port = 8888;

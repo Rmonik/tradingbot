@@ -13,7 +13,7 @@ const container = containerManager.getContainer();
 
 // generate db name
 const dbName = `simulation-${randomUUID()}`;
-console.log("Creating database with name", dbName);
+console.log("Generated database name: ", dbName);
 container.bind(ContainerIdentifiers.DatabaseName).toConstantValue(dbName);
 
 // Create simulator and simulate
