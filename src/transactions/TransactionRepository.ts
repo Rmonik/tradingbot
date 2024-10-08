@@ -12,11 +12,11 @@ export class TransactionRepository {
   public constructor(@inject(ContainerIdentifiers.Database) private readonly db: IDatabase) { }
 
   public async insertTransaction(transaction: ITransaction): Promise<void> {
-    await this.db.create(this.collection, transaction);
+    await this.db.execute(this.collection, col => col.insertOne(transaction));
   }
 
   public async getLastTransaction(): Promise<Null<ITransaction>> {
-    const results: ITransaction[] = await this.db.findExtended(this.collection, {}, { _id: -1}, 1);
-    return results[0] ?? null;
+    return await this.db.execute(this.collection, col => col.findOne({}, { sort: { date: -1 } }));
   }
+
 }

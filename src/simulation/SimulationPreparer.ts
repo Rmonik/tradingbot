@@ -4,6 +4,7 @@ import { CsvIngestor } from "../core/CsvIngestor.js";
 import { SimulationPricesRepository } from "./SimulationPricesRepository.js";
 import { IPricePoint } from "../core/types.js";
 import { BalanceRepository } from "./BalanceRepository.js";
+import { SimulationConfigProvider } from "./SimulationConfigProvider.js";
 
 
 @injectable()
@@ -13,6 +14,7 @@ export class SimulationPreparer {
     private readonly csvIngestor: CsvIngestor,
     private readonly simulationPricesRepository: SimulationPricesRepository,
     private readonly balanceRepository: BalanceRepository,
+    private readonly simulationConfigProvider: SimulationConfigProvider,
     
   ) { }
 
@@ -31,13 +33,11 @@ export class SimulationPreparer {
       };
     });
     await this.simulationPricesRepository.insertPrices(pricePoints);
+    await this.simulationPricesRepository.createIndexes();
   }
 
   private async initializeWallet(): Promise<void> {
-    await this.balanceRepository.setBalance({
-      wallet: 0,
-      fiat: 10000,
-    })
+    await this.balanceRepository.setBalance(this.simulationConfigProvider.getInitialWallet())
   }
 
 }

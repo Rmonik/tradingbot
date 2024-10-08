@@ -2,6 +2,7 @@ import { inject, injectable } from "inversify";
 import { ContainerIdentifiers } from "../core/Container/ContainerIdentifiers.js";
 import { IDatabase, IPricePoint } from "../core/types.js";
 import { isDefined } from "../utils/TypeUtils.js";
+import { Null } from "../utils/types.js";
 
 
 
@@ -14,19 +15,15 @@ export class SimulationPricesRepository {
   
 
   public async insertPrices(prices: IPricePoint[]): Promise<void> {
-    for(const price of prices) {
-      await this.database.create(this.collectionName, price);
-    }
+    await this.database.execute(this.collectionName, col => col.insertMany(prices));
   }
 
-  public async getAndDeleteNextPrice(): Promise<IPricePoint> {
-    const pricePoint: IPricePointDb | undefined = (await this.database.findExtended(this.collectionName, {}, {date: 1}, 1))[0];
-    if (!isDefined(pricePoint)) throw new Error("No more price points available");
-    await this.database.delete(this.collectionName, {_id: pricePoint._id});
-    return {
-      date: pricePoint.date,
-      price: pricePoint.price
-    }
+  public async getNextPricePointAfterDate(date: Date): Promise<Null<IPricePoint>> {
+    return await this.database.execute(this.collectionName, col => col.findOne({ date: { $gt: date } }, { sort: { date: 1 } }));
+  }
+
+  public async createIndexes(): Promise<void> {
+    await this.database.execute(this.collectionName, col => col.createIndex({ date: 1 }));
   }
 
   

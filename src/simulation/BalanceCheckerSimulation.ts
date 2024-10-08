@@ -1,8 +1,8 @@
 
 import { injectable } from "inversify"
-import { NotImplementedError } from "../utils/Errors.js";
 import { IBalanceChecker, IBalance } from "../trading/types.js";
 import { BalanceRepository } from "./BalanceRepository.js";
+import { isDefined } from "../utils/TypeUtils.js";
 
 @injectable()
 export class BalanceCheckerSimulation implements IBalanceChecker {
@@ -12,6 +12,10 @@ export class BalanceCheckerSimulation implements IBalanceChecker {
   ) { }
 
   public async checkBalance(): Promise<IBalance> {
-    return await this.balanceRepository.getBalance();
+    const result = await this.balanceRepository.getBalance();
+    if(!isDefined(result)) {
+      throw new Error("Balance not found");
+    }
+    return result;
   }
 }

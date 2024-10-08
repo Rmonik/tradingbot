@@ -4,9 +4,9 @@ import { IPricePoint } from "../core/types.js";
 import { BalanceCheckerSimulation } from "./BalanceCheckerSimulation.js";
 import { BalanceRepository } from "./BalanceRepository.js";
 import { IBalance } from "../trading/types.js";
-import { FeeProvider } from "./FeeProvider.js";
 import { IFee } from "./types.js";
 import { TransactionRepository } from "../transactions/TransactionRepository.js";
+import { SimulationConfigProvider } from "./SimulationConfigProvider.js";
 
 @injectable()
 export class TransactionExecutorSimulation implements ITransactionExecutor {
@@ -14,7 +14,7 @@ export class TransactionExecutorSimulation implements ITransactionExecutor {
   public constructor(
     private readonly transactionRepository: TransactionRepository,
     private readonly balanceRepository: BalanceRepository,
-    private readonly feeProvider: FeeProvider,
+    private readonly simulationConfigProvider: SimulationConfigProvider,
   ) { }
 
   public async makeTransaction(order: IOrder, pricePoint: IPricePoint): Promise<void> {
@@ -28,14 +28,14 @@ export class TransactionExecutorSimulation implements ITransactionExecutor {
 
     // Calculate new balance
     const oldBalance = await this.balanceRepository.getBalance();
-    const newBalance = await this.calculateNewBalance(oldBalance, order, pricePoint);
+    const newBalance = this.calculateNewBalance(oldBalance, order, pricePoint);
     await this.balanceRepository.setBalance(newBalance);
   }
 
 
 
   private calculateNewBalance(oldBalance: IBalance, order: IOrder, pricePoint: IPricePoint): IBalance { 
-    const fees: IFee = this.feeProvider.getFee();
+    const fees: IFee = this.simulationConfigProvider.getFee();
     if(order.type === TransactionType.BUY) {
       const newWallet = oldBalance.wallet + order.amount;
       const totalPrice = order.amount * pricePoint.price;
@@ -48,4 +48,5 @@ export class TransactionExecutorSimulation implements ITransactionExecutor {
       return { fiat: newFiat, wallet: newWallet };
     }
   }
+
 }

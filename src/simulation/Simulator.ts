@@ -3,6 +3,7 @@ import { SimulationPreparer } from "./SimulationPreparer.js";
 import { BalanceRepository } from "./BalanceRepository.js";
 import { IBalance, ITrader } from "../trading/types.js";
 import { Trader } from "../trading/Trader.js";
+import { Null } from "../utils/types.js";
 
 
 @injectable()
@@ -30,7 +31,7 @@ export class Simulator {
     }
 
     // Print & store results
-    const balance: IBalance = await this.balanceRepository.getBalance();
+    const balance: Null<IBalance> = await this.balanceRepository.getBalance();
     console.log(balance);
 
   }

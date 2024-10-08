@@ -3,7 +3,6 @@ import { ContainerIdentifiers } from "../core/Container/ContainerIdentifiers.js"
 import { ContainerManager } from "../core/Container/ContainerManager.js";
 import { ResolutionMode } from "../core/types.js";
 import { Simulator } from "./Simulator.js";
-import { disposeConnections } from "../core/Database.js";
 
 
 // Create DI Container
@@ -16,8 +15,7 @@ container.bind(ContainerIdentifiers.DatabaseName).toConstantValue(`simulation-${
 
 // Create simulator and simulate
 const simulator = container.get(Simulator);
+const timestamp = new Date().getTime();
 simulator.simulate()
-  .then(() => console.log("done simulating"))
-  .then(() => disposeConnections())
-  .then(() => console.log("closed connections"));
+  .then(() => console.log("done simulating in", (new Date().getTime() - timestamp) / 1000, "s"))
 

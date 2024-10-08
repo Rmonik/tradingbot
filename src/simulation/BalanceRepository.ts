@@ -3,6 +3,7 @@ import { IBalance } from "../trading/types.js";
 import { ContainerIdentifiers } from "../core/Container/ContainerIdentifiers.js";
 import { IDatabase } from "../core/types.js";
 import { isDefined } from "../utils/TypeUtils.js";
+import { Null } from "../utils/types.js";
 
 
 @injectable()
@@ -14,15 +15,14 @@ export class BalanceRepository {
   ) { }
 
   public async getBalance(): Promise<IBalance> {
-    return (await this.database.find(this.collectionName, {}))[0];
+    const result: Null<IBalance> = await this.database.execute(this.collectionName, coll => coll.findOne({}));
+    if(!isDefined(result)) {
+      throw new Error("Balance not found");
+    }
+    return result;
   }
 
   public async setBalance(balance: IBalance): Promise<void> {
-    const currentBalance: IBalance = (await this.database.find(this.collectionName, {}))[0];
-    if(!isDefined(currentBalance)) {
-      await this.database.create(this.collectionName, balance);
-    } else {
-      await this.database.replace(this.collectionName, balance);
-    }
+    await this.database.execute(this.collectionName, coll => coll.updateOne({}, { $set: balance }, { upsert: true }));
   }
 }

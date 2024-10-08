@@ -1,5 +1,5 @@
 import { Container } from "inversify";
-import { Sort } from "mongodb";
+import { Collection, Document, Sort } from "mongodb";
 
 export interface IJob {
   readonly run: () => Promise<void>;
@@ -15,12 +15,8 @@ export interface IContainerManager {
 }
 
 export interface IDatabase {
-  find(collection: string, filter: object): Promise<any[]>;
-  findExtended(collection: string, filter: object, sort?: Sort, limit?: number): Promise<any[]>;
-  create(collection: string, document: object ): Promise<void>;
-  update(collection: string, filter: object, update: object ): Promise<void>;
-  replace(collection: string, newObj: object): Promise<void>;
-  delete(collection: string, filter: object ): Promise<void>;
+  execute<T extends Document>(collection: string, callback: (collection: Collection<T>) => Promise<T | null | string>): Promise<T | null>;
+
 }
 
 export interface IPricePoint {
