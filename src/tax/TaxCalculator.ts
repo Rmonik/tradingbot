@@ -18,9 +18,10 @@ export class TaxCalculator {
     const transactions = [...transactionHistory];
     const assets = transactions.sort((a, b) => a.date.getTime() - b.date.getTime());
     
-    if(this.TaxConfigProvider.getConfig().taxMethod === TaxMethod.FIFO) {
+    const taxMethodToUse = this.TaxConfigProvider.getConfig().taxMethod;
+    if(taxMethodToUse === TaxMethod.FIFO) {
       return this.calculateFIFO(assets);
-    } else if(this.TaxConfigProvider.getConfig().taxMethod === TaxMethod.LIFO) {
+    } else if(taxMethodToUse === TaxMethod.LIFO) {
       return this.calculateLIFO(assets);
     }
     throw new Error("Unknown tax method");
@@ -45,14 +46,16 @@ export class TaxCalculator {
           if (!isDefined(asset)) {
             throw new Error("Cannot calculate tax -- More assets sold than bought");
           }
-          if(asset.amount > amountLeftToSell) {
+          if (asset.amount > amountLeftToSell) {
+            // If the asset has more than we need to sell, handle the entire amountLeftToSell and update the asset
             profit += (transaction.price - asset.price) * amountLeftToSell;
-            amountLeftToSell = 0;
             assetsQueue.front()!.amount -= amountLeftToSell;
+            amountLeftToSell = 0;
           } else {
+            // If the asset has less than we need to sell, remove the asset from the queue and reduce the amountLeftToSell by the amount of the asset
             profit += (transaction.price - asset.price) * asset.amount;
-            amountLeftToSell -= asset.amount;
             assetsQueue.dequeue();
+            amountLeftToSell -= asset.amount;
           }
         }
       }
@@ -86,12 +89,12 @@ export class TaxCalculator {
           }
           if(asset.amount > amountLeftToSell) {
             profit += (transaction.price - asset.price) * amountLeftToSell;
-            amountLeftToSell = 0;
             assetsQueue.peek()!.amount -= amountLeftToSell;
+            amountLeftToSell = 0;
           } else {
             profit += (transaction.price - asset.price) * asset.amount;
-            amountLeftToSell -= asset.amount;
             assetsQueue.pop();
+            amountLeftToSell -= asset.amount;
           }
         }
       }
