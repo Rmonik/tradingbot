@@ -16,7 +16,11 @@ export class TransactionRepository {
   }
 
   public async getLastTransaction(): Promise<Null<ITransaction>> {
-    return await this.db.execute(this.collection, col => col.findOne({}, { sort: { date: -1 } }));
+    return await this.db.execute<ITransaction>(this.collection, col => col.findOne({}, { sort: { date: -1 } }));
+  }
+
+  public async getAllTransactions(): Promise<ITransaction[]> {
+    return await this.db.execute<ITransaction>(this.collection, col => col.find().toArray());
   }
 
 }

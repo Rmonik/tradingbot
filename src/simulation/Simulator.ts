@@ -5,6 +5,8 @@ import { IBalance, ITrader } from "../trading/types.js";
 import { Trader } from "../trading/Trader.js";
 import { Null } from "../utils/types.js";
 import { SimulationEndError } from "./errors/SimulationEndError.js";
+import { TaxCalculator } from "../tax/TaxCalculator.js";
+import { TransactionRepository } from "../transactions/TransactionRepository.js";
 
 
 @injectable()
@@ -14,6 +16,8 @@ export class Simulator {
     private readonly simulationPreparer: SimulationPreparer,
     private readonly balanceRepository: BalanceRepository,
     private readonly trader: Trader,
+    private readonly taxCalculator: TaxCalculator,
+    private readonly transactionRepository: TransactionRepository,
   ) { }
 
   public async simulate(): Promise<void> {
@@ -38,6 +42,11 @@ export class Simulator {
     // Print & store results
     const balance: Null<IBalance> = await this.balanceRepository.getBalance();
     console.log(balance);
+
+    // Calculate tax
+    const transactions = await this.transactionRepository.getAllTransactions();
+    const tax = this.taxCalculator.calculateTax(transactions);
+    console.log(tax);
 
   }
 }

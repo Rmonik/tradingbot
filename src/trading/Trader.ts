@@ -1,8 +1,8 @@
-import { inject, injectable } from "inversify";
+import { inject, injectable, tagged } from "inversify";
 import { ContainerIdentifiers } from "../core/Container/ContainerIdentifiers.js";
-import { TransactionDeterminator } from "../transactions/TransactionDeterminator.js";
+import { BasicBuyAndHoldV1Algorithm } from "../transactions/BasicBuyAndHoldV1Algorithm.js";
 import { TransactionRepository } from "../transactions/TransactionRepository.js";
-import { ITransactionExecutor } from "../transactions/types.js";
+import { ITradingAlgorithm, ITransactionExecutor } from "../transactions/types.js";
 import { isDefined } from "../utils/TypeUtils.js";
 import { ITrader, IPriceChecker, IBalanceChecker } from "./types.js";
 
@@ -13,7 +13,7 @@ export class Trader implements ITrader {
   public constructor(
     @inject(ContainerIdentifiers.PriceChecker) private readonly priceChecker: IPriceChecker,
     @inject(ContainerIdentifiers.BalanceChecker) private readonly balanceChecker: IBalanceChecker,
-    private readonly transactionDeterminator: TransactionDeterminator,
+    @inject(ContainerIdentifiers.TradingAlgorithm) private readonly transactionDeterminator: ITradingAlgorithm,
     @inject(ContainerIdentifiers.TransactionExecutor) private readonly transactionExecutor: ITransactionExecutor,
     private readonly transactionRepository: TransactionRepository,
   ) {

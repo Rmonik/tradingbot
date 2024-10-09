@@ -20,5 +20,8 @@ export interface IOrder {
 
 export interface ITransactionExecutor {
   makeTransaction(order: IOrder, pricePoint: IPricePoint): Promise<void>;
+}
 
+export interface ITradingAlgorithm {
+  determineTransaction(currentPrice: number, wallet: number, fiat: number, lastTransaction: ITransaction | null): IOrder | null;
 }

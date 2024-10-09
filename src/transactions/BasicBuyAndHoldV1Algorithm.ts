@@ -1,17 +1,17 @@
 import { injectable } from "inversify";
 import { Null } from "../utils/types.js";
 import { isDefined } from "../utils/TypeUtils.js";
-import { ITransaction, IOrder, TransactionType } from "./types.js";
+import { ITransaction, IOrder, TransactionType, ITradingAlgorithm } from "./types.js";
 
 
 @injectable()
-export class TransactionDeterminator {
+export class BasicBuyAndHoldV1Algorithm implements ITradingAlgorithm {
 
   public constructor() {
 
   }
 
-  determineTransaction(currentPrice: number, wallet: number, fiat: number, lastTransaction: Null<ITransaction>): Null<IOrder> {
+  public determineTransaction(currentPrice: number, wallet: number, fiat: number, lastTransaction: Null<ITransaction>): Null<IOrder> {
     if(!isDefined(lastTransaction)) return {
       type: TransactionType.BUY,
       amount: fiat * 0.5 / currentPrice,

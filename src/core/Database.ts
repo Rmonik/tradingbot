@@ -29,9 +29,10 @@ export class Database implements IDatabase {
     return Database.client;
   }
 
-  public async execute<T extends Document>(collection: string, callback: (collection: Collection<T>) => Promise<T | null>): Promise<T | null> {
-    let result: T | null;
-    const client = await this.getClient();
+  public async execute<T extends Document>(collection: string, callback: (collection: Collection<T>) => Promise<T | null >): Promise<T | null>
+  public async execute<T extends Document>(collection: string, callback: (collection: Collection<T>) => Promise<T[]>): Promise<T[]> {
+    let result: T | T[] | null ;
+    const client: MongoClient = await this.getClient();
     try {
       const collectionInstance = client.db(this.databaseName).collection<T>(collection);
       result = await callback(collectionInstance);

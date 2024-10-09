@@ -15,7 +15,9 @@ export interface IContainerManager {
 }
 
 export interface IDatabase {
-  execute<T extends Document>(collection: string, callback: (collection: Collection<T>) => Promise<T | null | string>): Promise<T | null>;
+  execute<T extends Document>(collection: string, callback: (collection: Collection<T>) => Promise<T | null >): Promise<T | null >;
+  execute<T extends Document>(collection: string, callback: (collection: Collection<T>) => Promise<T[] >): Promise<T[] >;
+  execute<T extends Document>(collection: string, callback: (collection: Collection<T>) => Promise<T | T[] | null >): Promise<T | null | T[] >;
 
 }
 

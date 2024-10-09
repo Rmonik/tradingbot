@@ -16,3 +16,7 @@ export interface IBalance {
   wallet: number;
   fiat: number;
 }
+
+export enum TradingAlgorithm {
+  BasicBuyLowSellHighV1 = "BasicBuyLowSellHighV1"
+}

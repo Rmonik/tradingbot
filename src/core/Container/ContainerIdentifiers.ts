@@ -1,3 +1,4 @@
+import { TradingAlgorithm } from "../../trading/types.js";
 
 export const ContainerIdentifiers = {
   ResulotionMode: Symbol("ResulotionMode"),
@@ -8,4 +9,6 @@ export const ContainerIdentifiers = {
   PriceChecker: Symbol("PriceChecker"),
   BalanceChecker: Symbol("BalanceChecker"),
   CsvIngestor: Symbol("CsvIngestor"),
+  TradingAlgorithm: Symbol("TradingAlgorithm"),
+  TradingAlgorithmName: Symbol("TradingAlgorithmName"),
 } as const;

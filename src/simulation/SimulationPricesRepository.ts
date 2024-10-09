@@ -22,11 +22,11 @@ export class SimulationPricesRepository {
     return await this.database.execute(this.collectionName, col => col.findOne({ date: { $gt: date } }, { sort: { date: 1 } }));
   }
 
+  /* @todo: move this to migrations/db init */
   public async createIndexes(): Promise<void> {
-    await this.database.execute(this.collectionName, col => col.createIndex({ date: 1 }));
+    await this.database.execute(this.collectionName, col => col.createIndex({ date: 1 }) as any);
   }
 
-  
 }
 
 interface IPricePointDb extends IPricePoint {
