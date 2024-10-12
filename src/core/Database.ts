@@ -1,5 +1,5 @@
 import { inject, injectable } from "inversify";
-import { Collection, Db, Document, MongoClient, Sort } from "mongodb";
+import { Collection, Db, Document, InsertManyResult, MongoClient, Sort } from "mongodb";
 import { IDatabase } from "./types.js";
 import { isDefined } from "../utils/TypeUtils.js";
 import { ContainerIdentifiers } from "./Container/ContainerIdentifiers.js";
@@ -29,13 +29,14 @@ export class Database implements IDatabase {
     return Database.client;
   }
 
-  public async execute<T extends Document>(collection: string, callback: (collection: Collection<T>) => Promise<T | null >): Promise<T | null>
-  public async execute<T extends Document>(collection: string, callback: (collection: Collection<T>) => Promise<T[]>): Promise<T[]> {
-    let result: T | T[] | null ;
+  public async execute<T extends Document, R>(collection: string, callback: (collection: Collection<T>) => Promise<R>): Promise<R>;
+  public async execute<T extends Document>(collection: string, callback: (collection: Collection<T>) => Promise<T | null>): Promise<T | null>;
+  public async execute<T extends Document>(collection: string, callback: (collection: Collection<T>) => Promise<T[]>): Promise<T[]>;
+  public async execute<T extends Document>(collection: string, callback: (collection: Collection<T>) => Promise<T | T[] | null>): Promise<T | null | T[]> {
     const client: MongoClient = await this.getClient();
     try {
       const collectionInstance = client.db(this.databaseName).collection<T>(collection);
-      result = await callback(collectionInstance);
+      const result = await callback(collectionInstance);
       return result;
     } catch (error: unknown) {
       console.error("Something went wrong while executing the database operation", error);

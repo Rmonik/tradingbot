@@ -19,16 +19,12 @@ export class SimulationPricesRepository {
   }
 
   public async getNextPricePointAfterDate(date: Date): Promise<Null<IPricePoint>> {
-    return await this.database.execute(this.collectionName, col => col.findOne({ date: { $gt: date } }, { sort: { date: 1 } }));
+    return await this.database.execute<IPricePoint>(this.collectionName, col => col.findOne({ date: { $gt: date } }, { sort: { date: 1 } }));
   }
 
   /* @todo: move this to migrations/db init */
   public async createIndexes(): Promise<void> {
-    await this.database.execute(this.collectionName, col => col.createIndex({ date: 1 }) as any);
+    await this.database.execute(this.collectionName, col => col.createIndex({ date: 1 }));
   }
 
-}
-
-interface IPricePointDb extends IPricePoint {
-  _id: string;
 }

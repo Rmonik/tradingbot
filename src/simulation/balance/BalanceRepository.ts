@@ -15,7 +15,7 @@ export class BalanceRepository {
   ) { }
 
   public async getBalance(): Promise<IBalance> {
-    const result: Null<IBalance> = await this.database.execute(this.collectionName, coll => coll.findOne({}));
+    const result: Null<IBalance> = await this.database.execute<IBalance>(this.collectionName, coll => coll.findOne({}));
     if(!isDefined(result)) {
       throw new Error("Balance not found");
     }
