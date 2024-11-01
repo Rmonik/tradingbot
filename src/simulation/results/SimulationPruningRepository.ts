@@ -9,10 +9,11 @@ export class SimulationPruningRepository {
     @inject(ContainerIdentifiers.Database) private readonly database: IDatabase,
   ) { }
 
-  public async getAllSimulationDbs(): Promise<void> {
-    await this.database.executeAdmin(async adminDb => {
+  public async getAllSimulationDbs(): Promise<string[]> {
+    const results = await this.database.executeAdmin(async adminDb => {
       const result = await adminDb.listDatabases();
       return result.databases.map(db => db.name).filter(name => name.startsWith("simulation"));
     });
+    return results ?? [];
   }
 }

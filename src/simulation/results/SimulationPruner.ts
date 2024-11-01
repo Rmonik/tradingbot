@@ -10,5 +10,10 @@ export class SimulationPruner {
     private readonly simulationPruningRepository: SimulationPruningRepository,
   ) { }
 
-
+  public async prune(): Promise<void> {
+    const dbs = await this.simulationPruningRepository.getAllSimulationDbs();
+    for(const db of dbs) {
+      await this.simulationPruningRepository.dropDb(db);
+    }
+  }
 }
