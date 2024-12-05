@@ -1,4 +1,3 @@
-import { randomUUID } from "crypto";
 import { ContainerIdentifiers } from "../core/Container/ContainerIdentifiers.js";
 import { ContainerManager } from "../core/Container/ContainerManager.js";
 import { ResolutionMode } from "../core/types.js";
@@ -13,8 +12,7 @@ containerManager.init(ResolutionMode.Simulation);
 const container = containerManager.getContainer();
 
 // generate db name
-const dbName = `simulation-${randomUUID()}`;
-console.log("Generated database name: ", dbName);
+const dbName = `simulation`;
 container.bind(ContainerIdentifiers.DatabaseName).toConstantValue(dbName);
 
 // specify algorithm

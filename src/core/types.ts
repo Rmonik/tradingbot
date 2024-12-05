@@ -27,15 +27,14 @@ export interface IDatabase {
   execute<T extends Document>(collection: string, callback: (collection: Collection<T>) => Promise<T | T[] | null>, database?: string): Promise<T | null | T[]>;
 
 
-  /**
-   * @warning - This method is not intended for general use. It is intended for use in migrations and database initialization.
-   * @param callback - execute a callback on the admin database
-   */
-  executeAdmin<T>(callback: (db: Admin) => Promise<T>): Promise<T | void>;
-
 }
 
 export interface IPricePoint {
+  asset: Asset;
   date: Date;
   price: number;
+}
+
+export enum Asset {
+  BTC = "btc",
 }

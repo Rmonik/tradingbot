@@ -1,4 +1,4 @@
-import { injectable } from "inversify";
+import { inject, injectable } from "inversify";
 import { IPricePoint } from "../../core/types.js";
 import { IBalance } from "../../trading/types.js";
 import { TransactionRepository } from "../../transactions/TransactionRepository.js";
@@ -6,6 +6,8 @@ import { ITransactionExecutor, IOrder, TransactionType } from "../../transaction
 import { BalanceRepository } from "../balance/BalanceRepository.js";
 import { SimulationConfigProvider } from "../SimulationConfigProvider.js";
 import { IFee } from "../types.js";
+import { ContainerIdentifiers } from "../../core/Container/ContainerIdentifiers.js";
+import { DateService } from "../../core/DateService.js";
 
 
 @injectable()
@@ -15,6 +17,7 @@ export class TransactionExecutorSimulation implements ITransactionExecutor {
     private readonly transactionRepository: TransactionRepository,
     private readonly balanceRepository: BalanceRepository,
     private readonly simulationConfigProvider: SimulationConfigProvider,
+    private readonly dateService: DateService,
   ) { }
 
   public async makeTransaction(order: IOrder, pricePoint: IPricePoint): Promise<void> {
@@ -40,12 +43,12 @@ export class TransactionExecutorSimulation implements ITransactionExecutor {
       const newWallet = oldBalance.wallet + order.amount;
       const totalPrice = order.amount * pricePoint.price;
       const newFiat = oldBalance.fiat - totalPrice - fees.taker * totalPrice;
-      return { fiat: newFiat, wallet: newWallet };
+      return { fiat: newFiat, wallet: newWallet, modifiedOn: this.dateService.getNow() };
     } else {
       const newWallet = oldBalance.wallet - order.amount;
       const totalPrice = order.amount * pricePoint.price;
       const newFiat = oldBalance.fiat + totalPrice - fees.taker * totalPrice;
-      return { fiat: newFiat, wallet: newWallet };
+      return { fiat: newFiat, wallet: newWallet, modifiedOn: this.dateService.getNow() };
     }
   }
 

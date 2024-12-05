@@ -15,6 +15,7 @@ export interface IPriceChecker {
 export interface IBalance {
   wallet: number;
   fiat: number;
+  modifiedOn: Date;
 }
 
 export enum TradingAlgorithm {

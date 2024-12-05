@@ -7,9 +7,14 @@ import neatCsv from "neat-csv";
 export class CsvIngestor {
 
   public async ingestCSV<T>(filePath: string): Promise<T[]> {
-
-    const buffer = await fs.readFile(filePath, { encoding: "utf8" });
-    const results = await neatCsv(buffer);
-    return results as T[];
+    try {
+      const buffer = await fs.readFile(filePath, { encoding: "utf8" });
+      const results = await neatCsv(buffer);
+      return results as T[];
+    }
+    catch (error: unknown) {
+      console.log("something went wrong parsing the simulation CSV data");
+      throw error;
+    }
   }
 }
