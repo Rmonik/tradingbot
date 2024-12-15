@@ -14,9 +14,9 @@ export class BasicBuyAndHoldV1Algorithm implements ITradingAlgorithm {
   private readonly config = {
     initialBuyin: 0.5,
     sellTreshold: 0.1,
-    sellAmount: 0.1,
-    buyTreshold: 0.1,
-    buyAmount: 0.1,
+    sellAmount: 0.05,
+    buyTreshold: 0.08,
+    buyAmount: 0.08,
 
   } as const;
 
