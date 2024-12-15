@@ -29,12 +29,15 @@ export class BasicBuyAndHoldV1Algorithm implements ITradingAlgorithm {
   }
 
   public determineTransaction(currentPrice: number, wallet: number, fiat: number, lastTransaction: Null<ITransaction>): Null<IOrder> {
+
+    // Initial buy
     if(!isDefined(lastTransaction)) return {
       type: TransactionType.BUY,
       amount: fiat * this.config.initialBuyin / currentPrice,
     }
 
     if(currentPrice > lastTransaction.price * (1 + this.config.sellTreshold)) {
+      
       return {
         type: TransactionType.SELL,
         amount: wallet * this.config.sellAmount,
@@ -44,7 +47,7 @@ export class BasicBuyAndHoldV1Algorithm implements ITradingAlgorithm {
     if(currentPrice < lastTransaction.price * (1 - this.config.buyTreshold)) {
       return {
         type: TransactionType.BUY,
-        amount: fiat * this.config.buyAmount,
+        amount: (fiat * this.config.buyAmount) / currentPrice,
       }
     }
 
