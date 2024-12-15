@@ -3,8 +3,10 @@ import { ContainerIdentifiers } from "../core/Container/ContainerIdentifiers.js"
 import { CsvIngestor } from "../core/CsvIngestor.js";
 import { SimulationPricesRepository } from "./SimulationPricesRepository.js";
 import { Asset, IPricePoint } from "../core/types.js";
-import { BalanceRepository } from "./balance/BalanceRepository.js";
 import { SimulationConfigProvider } from "./SimulationConfigProvider.js";
+import { UserRepository } from "../users/UserRepository.js";
+import { IUser } from "../users/types.js";
+import { DateService } from "../core/DateService.js";
 
 
 @injectable()
@@ -13,14 +15,26 @@ export class SimulationPreparer {
   public constructor(
     private readonly csvIngestor: CsvIngestor,
     private readonly simulationPricesRepository: SimulationPricesRepository,
-    private readonly balanceRepository: BalanceRepository,
+    private readonly userRepository: UserRepository,
     private readonly simulationConfigProvider: SimulationConfigProvider,
+    private readonly dateService: DateService,
     
   ) { }
 
-  public async prepareSimulation(): Promise<void> {
+  public async prepareSimulation(): Promise<{ userId: string }> {
     await this.insertPricePoints();
-    await this.initializeWallet();
+    
+    const userId = await this.userRepository.createUser({
+      firstName: "Michael",
+      lastName: "Saylor",
+      email: "msaylor@fake.com",
+    }, {
+      wallet: 0,
+      fiat: 0,
+      modifiedOn: new Date(),       // @todo get this out of here, should be set in repo
+    });
+    await this.initializeWallet(userId);
+    return { userId: userId }
   };
 
 
@@ -38,8 +52,8 @@ export class SimulationPreparer {
     await this.simulationPricesRepository.createIndexes();
   }
 
-  private async initializeWallet(): Promise<void> {
-    await this.balanceRepository.setBalance(this.simulationConfigProvider.getInitialWallet())
+  private async initializeWallet(userId: string): Promise<void> {
+    await this.userRepository.setBalance(userId, this.simulationConfigProvider.getInitialWallet())
   }
 
 }

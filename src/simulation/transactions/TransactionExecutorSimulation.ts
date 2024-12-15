@@ -3,11 +3,12 @@ import { IPricePoint } from "../../core/types.js";
 import { IBalance } from "../../trading/types.js";
 import { TransactionRepository } from "../../transactions/TransactionRepository.js";
 import { ITransactionExecutor, IOrder, TransactionType } from "../../transactions/types.js";
-import { BalanceRepository } from "../balance/BalanceRepository.js";
 import { SimulationConfigProvider } from "../SimulationConfigProvider.js";
 import { IFee } from "../types.js";
 import { ContainerIdentifiers } from "../../core/Container/ContainerIdentifiers.js";
 import { DateService } from "../../core/DateService.js";
+import { UserRepository } from "../../users/UserRepository.js";
+import { isDefined } from "../../utils/TypeUtils.js";
 
 
 @injectable()
@@ -15,14 +16,14 @@ export class TransactionExecutorSimulation implements ITransactionExecutor {
 
   public constructor(
     private readonly transactionRepository: TransactionRepository,
-    private readonly balanceRepository: BalanceRepository,
     private readonly simulationConfigProvider: SimulationConfigProvider,
     private readonly dateService: DateService,
+    private readonly userRepository: UserRepository,
   ) { }
 
-  public async makeTransaction(order: IOrder, pricePoint: IPricePoint): Promise<void> {
+  public async makeTransaction(userId: string, order: IOrder, pricePoint: IPricePoint): Promise<void> {
     // Store transaction
-    await this.transactionRepository.insertTransaction({
+    await this.transactionRepository.insertTransaction(userId, {
       type: order.type,
       amount: order.amount,
       price: pricePoint.price,
@@ -30,9 +31,11 @@ export class TransactionExecutorSimulation implements ITransactionExecutor {
     });
 
     // Calculate new balance
-    const oldBalance = await this.balanceRepository.getBalance();
+    const user = await this.userRepository.findById(userId);
+    if(!isDefined(user)) throw new Error("Could not find user");
+    const oldBalance = user.balance;
     const newBalance = this.calculateNewBalance(oldBalance, order, pricePoint);
-    await this.balanceRepository.setBalance(newBalance);
+    await this.userRepository.setBalance(userId, newBalance);
   }
 
 

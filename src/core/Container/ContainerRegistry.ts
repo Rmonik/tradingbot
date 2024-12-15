@@ -10,6 +10,7 @@ import { Trader } from "../../trading/Trader.js";
 import { TransactionRepository } from "../../transactions/TransactionRepository.js";
 import { registerTaxServices } from "../../tax/registry.js";
 import { registerTradingServices } from "../../trading/registry.js";
+import { registerUserServices } from "../../users/registry.js";
 
 
 
@@ -27,4 +28,5 @@ export function registerContainerServices(container: Container) {
 
   registerTaxServices(container);
   registerTradingServices(container);
+  registerUserServices(container);
 }

@@ -4,7 +4,8 @@ import { BasicBuyAndHoldV1Algorithm } from "../transactions/BasicBuyAndHoldV1Alg
 import { TransactionRepository } from "../transactions/TransactionRepository.js";
 import { ITradingAlgorithm, ITransactionExecutor } from "../transactions/types.js";
 import { isDefined } from "../utils/TypeUtils.js";
-import { ITrader, IPriceChecker, IBalanceChecker } from "./types.js";
+import { ITrader, IPriceChecker, IBalance } from "./types.js";
+import { UserRepository } from "../users/UserRepository.js";
 
 
 @injectable()
@@ -12,27 +13,29 @@ export class Trader implements ITrader {
 
   public constructor(
     @inject(ContainerIdentifiers.PriceChecker) private readonly priceChecker: IPriceChecker,
-    @inject(ContainerIdentifiers.BalanceChecker) private readonly balanceChecker: IBalanceChecker,
     @inject(ContainerIdentifiers.TradingAlgorithm) private readonly transactionDeterminator: ITradingAlgorithm,
     @inject(ContainerIdentifiers.TransactionExecutor) private readonly transactionExecutor: ITransactionExecutor,
     private readonly transactionRepository: TransactionRepository,
+    private readonly userRepository: UserRepository,
   ) {
 
   }
 
-  public async trade(): Promise<void> {
+  public async trade(userId: string): Promise<void> {
     // Check price
     const pricePoint = await this.priceChecker.checkPrice();
   
     // Check balance
-    const balance = await this.balanceChecker.checkBalance();
+    const user = await this.userRepository.findById(userId);
+    if(!isDefined(user)) throw new Error(`Could not find user with id ${userId}`);
+    const balance: IBalance = user.balance;
 
     // Check last transaction
-    const lastTransaction = await this.transactionRepository.getLastTransaction();
+    const lastTransaction = await this.transactionRepository.getLastTransaction(userId);
 
     // Make order
     const order = await this.transactionDeterminator.determineTransaction(pricePoint.price, balance.wallet, balance.fiat, lastTransaction);
-    if(isDefined(order)) await this.transactionExecutor.makeTransaction(order, pricePoint);
+    if(isDefined(order)) await this.transactionExecutor.makeTransaction(userId, order, pricePoint);
 
   }
 }

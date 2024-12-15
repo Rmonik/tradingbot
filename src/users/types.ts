@@ -2,7 +2,7 @@ import { IBalance } from "../trading/types.js";
 
 
 export interface IUser {
-    _id: string;
+    id: string;
     firstName: string;
     lastName: string;
     email: string;

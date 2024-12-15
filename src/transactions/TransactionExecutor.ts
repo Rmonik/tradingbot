@@ -5,7 +5,7 @@ import { IOrder, ITransactionExecutor } from "./types.js";
 export class TransactionExecutor implements ITransactionExecutor {
 
 
-  public makeTransaction(order: IOrder): Promise<void> {
+  public makeTransaction(userId: string, order: IOrder): Promise<void> {
     throw new NotImplementedError();
   }
 

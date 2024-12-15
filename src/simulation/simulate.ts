@@ -7,6 +7,7 @@ import { SimulationConfigProvider } from "./SimulationConfigProvider.js";
 
 
 // Create DI Container
+console.log("Initializing DI container");
 const containerManager = new ContainerManager();
 containerManager.init(ResolutionMode.Simulation);
 const container = containerManager.getContainer();

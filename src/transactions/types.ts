@@ -19,7 +19,7 @@ export interface IOrder {
 }
 
 export interface ITransactionExecutor {
-  makeTransaction(order: IOrder, pricePoint: IPricePoint): Promise<void>;
+  makeTransaction(userId: string, order: IOrder, pricePoint: IPricePoint): Promise<void>;
 }
 
 export interface ITradingAlgorithm {

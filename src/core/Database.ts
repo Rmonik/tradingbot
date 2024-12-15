@@ -27,8 +27,10 @@ export class Database implements IDatabase {
 
   private async getClient(): Promise<MongoClient> {
     if(!isDefined(Database.client)) {
+      console.log("initializing mongo client");
       Database.client = new MongoClient("mongodb://localhost:27018");
       await Database.client.connect();
+      console.log("mongo client connected")
     }
     return Database.client;
   }

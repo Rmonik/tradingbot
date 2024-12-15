@@ -1,11 +1,7 @@
 import { IPricePoint } from "../core/types.js";
 
 export interface ITrader {
-  trade(): Promise<void>;
-}
-
-export interface IBalanceChecker {
-  checkBalance(): Promise<IBalance>;
+  trade(userId: string): Promise<void>;
 }
 
 export interface IPriceChecker {
