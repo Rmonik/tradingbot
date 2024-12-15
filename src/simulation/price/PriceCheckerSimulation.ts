@@ -1,5 +1,5 @@
 import { injectable } from "inversify";
-import { IPricePoint } from "../../core/types.js";
+import { Asset, IPricePoint } from "../../core/types.js";
 import { IPriceChecker } from "../../trading/types.js";
 import { isDefined } from "../../utils/TypeUtils.js";
 import { SimulationEndError } from "../errors/SimulationEndError.js";
@@ -19,8 +19,8 @@ export class PriceCheckerSimulation implements IPriceChecker {
   }
 
 
-  public async checkPrice(): Promise<IPricePoint> {
-    const pricePoint = await this.simulationPricesRepository.getNextPricePointAfterDate(this.lastCheckedDate);
+  public async checkPrice(asset: Asset): Promise<IPricePoint> {
+    const pricePoint = await this.simulationPricesRepository.getNextPricePointAfterDate(asset, this.lastCheckedDate);
     if(!isDefined(pricePoint) || pricePoint.date >= this.simulationConfigProvider.getSimulationInterval().end) {
       throw new SimulationEndError("No more price points in interval");
     }

@@ -1,11 +1,11 @@
-import { IPricePoint } from "../core/types.js";
+import { Asset, IPricePoint } from "../core/types.js";
 
 export interface ITrader {
-  trade(userId: string): Promise<void>;
+  trade(userId: string, asset: Asset): Promise<void>;
 }
 
 export interface IPriceChecker {
-  checkPrice(): Promise<IPricePoint>;
+  checkPrice(asset: Asset): Promise<IPricePoint>;
 }
 
 export interface IBalance {

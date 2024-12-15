@@ -7,6 +7,7 @@ import { SimulationEndError } from "./errors/SimulationEndError.js";
 import { TaxCalculator } from "../tax/TaxCalculator.js";
 import { TransactionRepository } from "../transactions/TransactionRepository.js";
 import { UserRepository } from "../users/UserRepository.js";
+import { SimulationConfigProvider } from "./SimulationConfigProvider.js";
 
 
 @injectable()
@@ -18,17 +19,18 @@ export class Simulator {
     private readonly trader: Trader,
     private readonly taxCalculator: TaxCalculator,
     private readonly transactionRepository: TransactionRepository,
+    private readonly simulationConfigProvider: SimulationConfigProvider,
   ) { }
 
   public async simulate(): Promise<void> {
     // Prepare simulation
-    
+    const asset = await this.simulationConfigProvider.getAsset();
     const prepResult: { userId: string } = await this.simulationPreparer.prepareSimulation();
 
     // Run simulation
     while(true) {
       try {
-        await this.trader.trade(prepResult.userId);
+        await this.trader.trade(prepResult.userId, asset);
       }
       catch (err: any) {
         if (err instanceof SimulationEndError) {

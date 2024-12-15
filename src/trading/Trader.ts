@@ -6,6 +6,7 @@ import { ITradingAlgorithm, ITransactionExecutor } from "../transactions/types.j
 import { isDefined } from "../utils/TypeUtils.js";
 import { ITrader, IPriceChecker, IBalance } from "./types.js";
 import { UserRepository } from "../users/UserRepository.js";
+import { Asset } from "../core/types.js";
 
 
 @injectable()
@@ -21,9 +22,9 @@ export class Trader implements ITrader {
 
   }
 
-  public async trade(userId: string): Promise<void> {
+  public async trade(userId: string, asset: Asset): Promise<void> {
     // Check price
-    const pricePoint = await this.priceChecker.checkPrice();
+    const pricePoint = await this.priceChecker.checkPrice(asset);
   
     // Check balance
     const user = await this.userRepository.findById(userId);

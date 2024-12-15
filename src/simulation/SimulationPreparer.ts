@@ -40,6 +40,10 @@ export class SimulationPreparer {
 
   private async insertPricePoints(): Promise<void> {
     const asset: Asset = this.simulationConfigProvider.getAsset();
+
+    // Early return
+    if(await this.simulationPricesRepository.assetAlreadyExists(asset)) return;
+
     const simulationData: ISimulationData[] = await this.csvIngestor.ingestCSV<ISimulationData>(`assets/pricehistory/${asset}_daily.csv`);
     const pricePoints: IPricePoint[] = simulationData.map((data) => {
       return {
@@ -49,7 +53,7 @@ export class SimulationPreparer {
       };
     });
     await this.simulationPricesRepository.insertPrices(pricePoints);
-    await this.simulationPricesRepository.createIndexes();
+    await this.simulationPricesRepository. createIndexes();
   }
 
   private async initializeWallet(userId: string): Promise<void> {

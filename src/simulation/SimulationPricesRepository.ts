@@ -1,6 +1,6 @@
 import { inject, injectable } from "inversify";
 import { ContainerIdentifiers } from "../core/Container/ContainerIdentifiers.js";
-import { IDatabase, IPricePoint } from "../core/types.js";
+import { Asset, IDatabase, IPricePoint } from "../core/types.js";
 import { isDefined } from "../utils/TypeUtils.js";
 import { Null } from "../utils/types.js";
 
@@ -18,8 +18,13 @@ export class SimulationPricesRepository {
     await this.database.execute(this.collectionName, col => col.insertMany(prices));
   }
 
-  public async getNextPricePointAfterDate(date: Date): Promise<Null<IPricePoint>> {
-    return await this.database.execute<IPricePoint>(this.collectionName, col => col.findOne({ date: { $gt: date } }, { sort: { date: 1 } }));
+  public async getNextPricePointAfterDate(asset: Asset, date: Date): Promise<Null<IPricePoint>> {
+    return await this.database.execute<IPricePoint>(this.collectionName, col => col.findOne({ date: { $gt: date }, asset: Asset }, { sort: { date: 1 } }));
+  }
+
+  public async assetAlreadyExists(asset: Asset): Promise<boolean> {
+    const result = this.getNextPricePointAfterDate(asset, new Date(1900, 0, 1));
+    return isDefined(result);
   }
 
   /* @todo: move this to migrations/db init */
