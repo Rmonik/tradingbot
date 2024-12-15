@@ -22,6 +22,8 @@ export class TransactionExecutorSimulation implements ITransactionExecutor {
   ) { }
 
   public async makeTransaction(userId: string, order: IOrder, pricePoint: IPricePoint): Promise<void> {
+    // Calculate new balance and validate
+
     // Store transaction
     await this.transactionRepository.insertTransaction(userId, {
       type: order.type,
@@ -41,14 +43,23 @@ export class TransactionExecutorSimulation implements ITransactionExecutor {
 
 
   private calculateNewBalance(oldBalance: IBalance, order: IOrder, pricePoint: IPricePoint): IBalance { 
+    
     const fees: IFee = this.simulationConfigProvider.getFee();
+
     if(order.type === TransactionType.BUY) {
       const newWallet = oldBalance.wallet + order.amount;
       const totalPrice = order.amount * pricePoint.price;
       const newFiat = oldBalance.fiat - totalPrice - fees.taker * totalPrice;
+      
+      if(newFiat < 0) {
+        throw new Error("Buy order cannot be completed: Not enough fiat");
+      }
+
       return { fiat: newFiat, wallet: newWallet, modifiedOn: this.dateService.getNow() };
     } else {
       const newWallet = oldBalance.wallet - order.amount;
+
+      if(newWallet < 0) throw new Error("Sell order cannot be completed: Not enough assets");
       const totalPrice = order.amount * pricePoint.price;
       const newFiat = oldBalance.fiat + totalPrice - fees.taker * totalPrice;
       return { fiat: newFiat, wallet: newWallet, modifiedOn: this.dateService.getNow() };

@@ -2,7 +2,7 @@ import { inject, injectable, tagged } from "inversify";
 import { ContainerIdentifiers } from "../core/Container/ContainerIdentifiers.js";
 import { BasicBuyAndHoldV1Algorithm } from "../transactions/BasicBuyAndHoldV1Algorithm.js";
 import { TransactionRepository } from "../transactions/TransactionRepository.js";
-import { ITradingAlgorithm, ITransactionExecutor } from "../transactions/types.js";
+import { IOrder, ITradingAlgorithm, ITransactionExecutor } from "../transactions/types.js";
 import { isDefined } from "../utils/TypeUtils.js";
 import { ITrader, IPriceChecker, IBalance } from "./types.js";
 import { UserRepository } from "../users/UserRepository.js";
@@ -39,4 +39,5 @@ export class Trader implements ITrader {
     if(isDefined(order)) await this.transactionExecutor.makeTransaction(userId, order, pricePoint);
 
   }
+
 }
