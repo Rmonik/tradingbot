@@ -42,7 +42,8 @@ export class SimulationPreparer {
     const asset: Asset = this.simulationConfigProvider.getAsset();
 
     // Early return
-    if(await this.simulationPricesRepository.assetAlreadyExists(asset)) return;
+    const alreadyExists = await this.simulationPricesRepository.assetAlreadyExists(asset)
+    if(alreadyExists) return;
 
     const simulationData: ISimulationData[] = await this.csvIngestor.ingestCSV<ISimulationData>(`assets/pricehistory/${asset}_daily.csv`);
     const pricePoints: IPricePoint[] = simulationData.map((data) => {

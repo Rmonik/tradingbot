@@ -7,8 +7,3 @@ export interface IFee {
   taker: number,
 }
 
-export interface ISimulationResult {
-  readonly finalBalance: IBalance,
-  readonly taxes: ITaxCalculationResult,
-  readonly algorithm: TradingAlgorithm,
-}

@@ -63,6 +63,7 @@ export class TaxCalculator {
     }
 
     return {
+      taxMethod: TaxMethod.FIFO,
       taxableProfit: profit,
       taxAmount: profit * this.TaxConfigProvider.getConfig().taxRate,
     }
@@ -102,6 +103,7 @@ export class TaxCalculator {
     }
 
     return {
+      taxMethod: TaxMethod.LIFO,
       taxableProfit: profit,
       taxAmount: profit * this.TaxConfigProvider.getConfig().taxRate,
     }

@@ -24,4 +24,5 @@ export interface ITransactionExecutor {
 
 export interface ITradingAlgorithm {
   determineTransaction(currentPrice: number, wallet: number, fiat: number, lastTransaction: ITransaction | null): IOrder | null;
+  describeAlgorithm(): string;
 }

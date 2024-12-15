@@ -12,4 +12,5 @@ export enum TaxMethod {
 export interface ITaxCalculationResult {
   taxableProfit: number,
   taxAmount: number,
+  taxMethod: TaxMethod,
 }

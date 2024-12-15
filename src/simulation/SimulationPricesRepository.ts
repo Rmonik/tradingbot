@@ -19,11 +19,11 @@ export class SimulationPricesRepository {
   }
 
   public async getNextPricePointAfterDate(asset: Asset, date: Date): Promise<Null<IPricePoint>> {
-    return await this.database.execute<IPricePoint>(this.collectionName, col => col.findOne({ date: { $gt: date }, asset: Asset }, { sort: { date: 1 } }));
+    return await this.database.execute<IPricePoint>(this.collectionName, col => col.findOne({ date: { $gt: date }, asset: asset }, { sort: { date: 1 } }));
   }
 
   public async assetAlreadyExists(asset: Asset): Promise<boolean> {
-    const result = this.getNextPricePointAfterDate(asset, new Date(1900, 0, 1));
+    const result = await this.getNextPricePointAfterDate(asset, new Date(1900, 0, 1));
     return isDefined(result);
   }
 
