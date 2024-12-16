@@ -5,10 +5,6 @@ import { Simulator } from "./Simulator.js";
 import { Database } from "../core/Database.js";
 import { SimulationConfigProvider } from "./SimulationConfigProvider.js";
 
-console.log("yey");
-console.log(process.argv);
-console.log("egrerg");
-
 // Create DI Container
 console.log("Initializing DI container");
 const containerManager = new ContainerManager();

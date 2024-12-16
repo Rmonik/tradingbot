@@ -12,6 +12,7 @@ import { PriceCheckerSimulation } from "./price/PriceCheckerSimulation.js";
 import { TransactionExecutorSimulation } from "./transactions/TransactionExecutorSimulation.js";
 import { SimulationResultsService } from "./results/SimulationResultsService.js";
 import { SimulationResultsRepository } from "./results/SimulationResultsRepository.js";
+import { SimulationDateProvider } from "./price/SimulationDateProvider.js";
 
 
 
@@ -26,6 +27,7 @@ export function registerSimulationContainerServices(container: Container) {
   container.bind(SimulationConfigProvider).toSelf();
   container.bind(SimulationResultsService).toSelf();
   container.bind(SimulationResultsRepository).toSelf();
+  container.bind(SimulationDateProvider).toSelf().inSingletonScope();
 
   // Simulation overrides
   container.bind<IPriceChecker>(ContainerIdentifiers.PriceChecker).to(PriceCheckerSimulation);

@@ -20,16 +20,11 @@ export class BasicBuyAndHoldV1Algorithm implements ITradingAlgorithm {
 
   public getConfig() {
     if (this.resolutionMode === ResolutionMode.Simulation && this.simulationConfigProvider.getSimulationMode() === SimulationMode.Randomized) return {
-      // initialBuyin: Math.random(),
-      // sellTreshold: Math.random() * 0.4,
-      // sellAmount: Math.random() * 0.4,
-      // buyTreshold: Math.random() * 0.4,
-      // buyAmount: Math.random() * 0.4,
-      initialBuyin: 0.6,
-      sellTreshold: 0.10,
-      sellAmount: 0.05,
-      buyTreshold: 0.05,
-      buyAmount: 0.05,
+      initialBuyin: Math.random(),
+      sellTreshold: Math.random() * 0.5,
+      sellAmount: Math.random() * 0.5,
+      buyTreshold: Math.random() * 0.5,
+      buyAmount: Math.random() * 0.5,
     }
     
     

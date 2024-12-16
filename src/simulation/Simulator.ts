@@ -10,6 +10,7 @@ import { UserRepository } from "../users/UserRepository.js";
 import { SimulationConfigProvider } from "./SimulationConfigProvider.js";
 import { SimulationResultsService } from "./results/SimulationResultsService.js";
 import { SimulationMode } from "./types.js";
+import { SimulationDateProvider } from "./price/SimulationDateProvider.js";
 
 
 @injectable()
@@ -20,6 +21,7 @@ export class Simulator {
     private readonly trader: Trader,
     private readonly simulationConfigProvider: SimulationConfigProvider,
     private readonly simulationResultsService: SimulationResultsService,
+    private readonly simulationDateProvider: SimulationDateProvider,
   ) { }
 
   public async simulate(): Promise<void> {
@@ -31,6 +33,7 @@ export class Simulator {
 
   private async simulateOnce(): Promise<void> {
     // Prepare simulation
+    await this.simulationDateProvider.resetDate();
     const asset = await this.simulationConfigProvider.getAsset();
     const prepResult: { userId: string } = await this.simulationPreparer.prepareSimulation();
 
