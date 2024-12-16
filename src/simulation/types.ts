@@ -10,3 +10,8 @@ export interface ISimulationInterval {
   start: Date,
   end: Date,
 }
+
+export enum SimulationMode {
+  Once = "once",
+  Randomized = "randomized",
+}

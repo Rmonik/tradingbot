@@ -1,5 +1,5 @@
 import { inject, injectable } from "inversify";
-import { IFee, ISimulationInterval } from "./types.js";
+import { IFee, ISimulationInterval, SimulationMode } from "./types.js";
 import { IBalance, TradingAlgorithm } from "../trading/types.js";
 import { Asset } from "../core/types.js";
 import { DateService } from "../core/DateService.js";
@@ -8,6 +8,14 @@ import { DateService } from "../core/DateService.js";
 export class SimulationConfigProvider {
   
   public constructor(private readonly dateService: DateService) { }
+
+  public getSimulationMode(): SimulationMode {
+    return SimulationMode.Randomized;
+  }
+
+  public getLoopsForRandomizedMode(): number {
+    return 100;
+  }
 
   public getInitialBalance(): IBalance {
     return {

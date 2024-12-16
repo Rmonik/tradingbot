@@ -9,6 +9,7 @@ import { TransactionRepository } from "../transactions/TransactionRepository.js"
 import { UserRepository } from "../users/UserRepository.js";
 import { SimulationConfigProvider } from "./SimulationConfigProvider.js";
 import { SimulationResultsService } from "./results/SimulationResultsService.js";
+import { SimulationMode } from "./types.js";
 
 
 @injectable()
@@ -16,15 +17,19 @@ export class Simulator {
 
   constructor(
     private readonly simulationPreparer: SimulationPreparer,
-    private readonly userRepository: UserRepository,
     private readonly trader: Trader,
-    private readonly taxCalculator: TaxCalculator,
-    private readonly transactionRepository: TransactionRepository,
     private readonly simulationConfigProvider: SimulationConfigProvider,
     private readonly simulationResultsService: SimulationResultsService,
   ) { }
 
   public async simulate(): Promise<void> {
+    const simulationLoops = this.simulationConfigProvider.getSimulationMode() === SimulationMode.Once ? 1 : this.simulationConfigProvider.getLoopsForRandomizedMode();
+    for(let i = 0; i < simulationLoops; i++) {
+      await this.simulateOnce();
+    }
+  }
+
+  private async simulateOnce(): Promise<void> {
     // Prepare simulation
     const asset = await this.simulationConfigProvider.getAsset();
     const prepResult: { userId: string } = await this.simulationPreparer.prepareSimulation();
@@ -47,6 +52,6 @@ export class Simulator {
     // Print & store results
     const simulationResults = await this.simulationResultsService.finalizeResults(prepResult.userId);
     console.log(simulationResults);
-    
+ 
   }
 }

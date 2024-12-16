@@ -5,6 +5,9 @@ import { Simulator } from "./Simulator.js";
 import { Database } from "../core/Database.js";
 import { SimulationConfigProvider } from "./SimulationConfigProvider.js";
 
+console.log("yey");
+console.log(process.argv);
+console.log("egrerg");
 
 // Create DI Container
 console.log("Initializing DI container");
@@ -24,6 +27,8 @@ container.bind(ContainerIdentifiers.TradingAlgorithmName).toConstantValue(simula
 const simulator = container.get(Simulator);
 const timestamp = new Date().getTime();
 console.log("Starting simulation");
+
+
 simulator.simulate()
   .then(() => console.log("done simulating in", (new Date().getTime() - timestamp) / 1000, "s"))
   .then(() => Database.disposeConnection());

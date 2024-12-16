@@ -20,7 +20,6 @@ export function registerContainerServices(container: Container) {
   container.bind<IDatabase>(ContainerIdentifiers.Database).to(Database);
 
   container.bind(DateService).toSelf();
-  container.bind(BasicBuyAndHoldV1Algorithm).toSelf();
   container.bind(CsvIngestor).toSelf();
   container.bind(Trader).toSelf();
   container.bind(TransactionRepository).toSelf();

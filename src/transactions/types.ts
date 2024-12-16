@@ -27,7 +27,7 @@ export interface IAlgorithmConfig {
 }
 
 export interface ITradingAlgorithm {
-  config: IAlgorithmConfig;
+  getConfig(): IAlgorithmConfig;
   determineTransaction(currentPrice: number, wallet: number, fiat: number, lastTransaction: ITransaction | null): IOrder | null;
   describeAlgorithm(): string;
 }

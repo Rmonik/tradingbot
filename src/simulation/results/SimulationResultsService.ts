@@ -46,7 +46,7 @@ export class SimulationResultsService {
         const taxResult = this.taxCalculator.calculateTax(transactions);
 
         // Calculate the results
-        const result = this.calculateSimulationResults(initialBalance, user.balance, firstPricePoint, lastPricePoint, transactions, taxResult, this.tradingAlgorithmName, this.tradingAlgorithm.describeAlgorithm(), this.simulationConfigProvider.getSimulationInterval(), this.tradingAlgorithm.config);
+        const result = this.calculateSimulationResults(initialBalance, user.balance, firstPricePoint, lastPricePoint, transactions, taxResult, this.tradingAlgorithmName, this.tradingAlgorithm.describeAlgorithm(), this.simulationConfigProvider.getSimulationInterval(), this.tradingAlgorithm.getConfig());
 
         // Store the results
         await this.simulationResultsRepository.insert(result);
