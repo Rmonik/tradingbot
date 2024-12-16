@@ -8,6 +8,7 @@ import { TaxCalculator } from "../tax/TaxCalculator.js";
 import { TransactionRepository } from "../transactions/TransactionRepository.js";
 import { UserRepository } from "../users/UserRepository.js";
 import { SimulationConfigProvider } from "./SimulationConfigProvider.js";
+import { SimulationResultsService } from "./results/SimulationResultsService.js";
 
 
 @injectable()
@@ -20,6 +21,7 @@ export class Simulator {
     private readonly taxCalculator: TaxCalculator,
     private readonly transactionRepository: TransactionRepository,
     private readonly simulationConfigProvider: SimulationConfigProvider,
+    private readonly simulationResultsService: SimulationResultsService,
   ) { }
 
   public async simulate(): Promise<void> {
@@ -43,13 +45,8 @@ export class Simulator {
     }
 
     // Print & store results
-    const user = await this.userRepository.findById(prepResult.userId);
-    console.log(user?.balance);
-
-    // Calculate tax
-    const transactions = await this.transactionRepository.getAllTransactions(prepResult.userId);
-    const tax = this.taxCalculator.calculateTax(transactions);
-    console.log(tax);
-
+    const simulationResults = await this.simulationResultsService.finalizeResults(prepResult.userId);
+    console.log(simulationResults);
+    
   }
 }

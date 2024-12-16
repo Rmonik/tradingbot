@@ -2,7 +2,7 @@ import { inject, injectable } from "inversify";
 import { ISimulationResult } from "./types.js";
 import { SimulationResultsRepository } from "./SimulationResultsRepository.js";
 import { IBalance, TradingAlgorithm } from "../../trading/types.js";
-import { IPricePoint } from "../../core/types.js";
+import { IPricePoint, ResolutionMode } from "../../core/types.js";
 import { SimulationConfigProvider } from "../SimulationConfigProvider.js";
 import { SimulationPricesRepository } from "../SimulationPricesRepository.js";
 import { ITaxCalculationResult, TaxMethod } from "../../tax/types.js";
@@ -28,10 +28,10 @@ export class SimulationResultsService {
         private readonly transactionsRepository: TransactionRepository,
         @inject(ContainerIdentifiers.TradingAlgorithmName) private readonly tradingAlgorithmName: TradingAlgorithm,
         @inject(ContainerIdentifiers.TradingAlgorithm) private readonly tradingAlgorithm: ITradingAlgorithm,
-        
+        @inject(ContainerIdentifiers.ResulotionMode) private readonly resolutionMode: ResolutionMode,
     ) { }
 
-    public async finalizeResults(userId: string): Promise<void> {
+    public async finalizeResults(userId: string): Promise<ISimulationResult> {
         // Fetch all the data
         const interval = this.simulationConfigProvider.getSimulationInterval();
         const firstPricePoint = await this.simulationPricesRepository.getNextPricePointAfterDate(this.simulationConfigProvider.getAsset(), addTime(interval.start, -1, TimeUnit.Milliseconds));
@@ -52,6 +52,8 @@ export class SimulationResultsService {
 
         // Prune the other simulation data data
         await this.pruneSimulationData();
+
+        return result;
     }
 
     private calculateSimulationResults(initialBalance: IBalance, finalBalance: IBalance, pricePointFirst: IPricePoint, pricePointLast: IPricePoint, transactions: ITransaction[], taxResult: ITaxCalculationResult, tradingAlgorithmName: TradingAlgorithm, tradingAlgorithmDescription: string): ISimulationResult {
@@ -87,8 +89,10 @@ export class SimulationResultsService {
         }
     }
 
-    public async pruneSimulationData(): Promise<void> {
-        throw new Error();
+    private async pruneSimulationData(): Promise<void> {
+        if(this.resolutionMode !== ResolutionMode.Simulation) throw new Error("Warning: Trying to run simulation clean up in production mode. Nothing was deleted");
+        await this.transactionsRepository.deleteAll();
+        await this.usersRepository.deleteAll();
     }
 
 } 

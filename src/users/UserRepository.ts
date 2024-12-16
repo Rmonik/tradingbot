@@ -32,4 +32,8 @@ export class UserRepository {
         await this.database.execute(this.collection, coll => coll.updateOne({ _id: new ObjectId(userId)}, { $set: { balance: balance}}))
     }
 
+    public async deleteAll(): Promise<void> {
+        await this.database.execute(this.collection, coll => coll.deleteMany());
+    }
+
 }

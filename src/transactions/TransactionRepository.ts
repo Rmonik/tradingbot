@@ -24,4 +24,8 @@ export class TransactionRepository {
     return await this.db.execute<ITransaction>(this.collection, col => col.find({ userId: new ObjectId(userId)}).toArray());
   }
 
+  public async deleteAll(): Promise<void> {
+    await this.db.execute(this.collection, col => col.deleteMany());
+  }
+
 }
