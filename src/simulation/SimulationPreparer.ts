@@ -58,7 +58,7 @@ export class SimulationPreparer {
   }
 
   private async initializeWallet(userId: string): Promise<void> {
-    await this.userRepository.setBalance(userId, this.simulationConfigProvider.getInitialWallet())
+    await this.userRepository.setBalance(userId, this.simulationConfigProvider.getInitialBalance())
   }
 
 }

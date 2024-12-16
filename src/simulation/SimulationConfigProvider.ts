@@ -9,7 +9,7 @@ export class SimulationConfigProvider {
   
   public constructor(private readonly dateService: DateService) { }
 
-  public getInitialWallet(): IBalance {
+  public getInitialBalance(): IBalance {
     return {
       wallet: 0,
       fiat: 10000,
@@ -30,7 +30,7 @@ export class SimulationConfigProvider {
  
   public getSimulationInterval(): { start: Date, end: Date } {
     return {
-      start: new Date("2016-01-01T00:00:00Z"),
+      start: new Date("2017-01-01T00:00:00Z"),
       end: new Date("2023-01-02T00:00:00Z"),
     }
   }

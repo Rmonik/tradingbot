@@ -15,6 +15,8 @@ export interface ISimulationResult {
       description: string,
     },
     readonly transactions: {
-      amount: number,
+      totalAmount: number,
+      buysAmount: number,
+      sellsAmount: number,
     }
   }
