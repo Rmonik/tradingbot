@@ -1,5 +1,5 @@
 import { ITaxCalculationResult } from "../../tax/types.js";
-import { IBalance, TradingAlgorithm } from "../../trading/types.js";
+import { TradingAlgorithm } from "../../transactions/types.js";
 import { ISimulationInterval } from "../types.js";
 
 export interface ISimulationResult {

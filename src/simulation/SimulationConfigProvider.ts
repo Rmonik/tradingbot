@@ -1,8 +1,9 @@
 import { inject, injectable } from "inversify";
 import { IFee, ISimulationInterval, SimulationMode } from "./types.js";
-import { IBalance, TradingAlgorithm } from "../trading/types.js";
+import { IBalance } from "../trading/types.js";
 import { Asset } from "../core/types.js";
 import { DateService } from "../core/DateService.js";
+import { TradingAlgorithm } from "../transactions/types.js";
 
 @injectable()
 export class SimulationConfigProvider {

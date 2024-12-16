@@ -1,7 +1,7 @@
 import { inject, injectable } from "inversify";
 import { ISimulationResult } from "./types.js";
 import { SimulationResultsRepository } from "./SimulationResultsRepository.js";
-import { IBalance, TradingAlgorithm } from "../../trading/types.js";
+import { IBalance } from "../../trading/types.js";
 import { IPricePoint, ResolutionMode } from "../../core/types.js";
 import { SimulationConfigProvider } from "../SimulationConfigProvider.js";
 import { SimulationPricesRepository } from "../SimulationPricesRepository.js";
@@ -12,9 +12,10 @@ import { UserRepository } from "../../users/UserRepository.js";
 import { isDefined } from "../../utils/TypeUtils.js";
 import { TaxCalculator } from "../../tax/TaxCalculator.js";
 import { TransactionRepository } from "../../transactions/TransactionRepository.js";
-import { IAlgorithmConfig, ITradingAlgorithm, ITransaction, TransactionType } from "../../transactions/types.js";
+import { ITransaction, TradingAlgorithm, TransactionType } from "../../transactions/types.js";
 import { ContainerIdentifiers } from "../../core/Container/ContainerIdentifiers.js";
 import { ISimulationInterval } from "../types.js";
+import { IAlgorithmConfig, ITradingAlgorithm } from "../../algorithms/types.js";
 
 
 @injectable()

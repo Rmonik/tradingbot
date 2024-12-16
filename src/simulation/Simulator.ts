@@ -1,16 +1,13 @@
-import { inject, injectable } from "inversify";
+import { injectable, multiInject } from "inversify";
 import { SimulationPreparer } from "./SimulationPreparer.js";
-import { IBalance, ITrader } from "../trading/types.js";
 import { Trader } from "../trading/Trader.js";
-import { Null } from "../utils/types.js";
 import { SimulationEndError } from "./errors/SimulationEndError.js";
-import { TaxCalculator } from "../tax/TaxCalculator.js";
-import { TransactionRepository } from "../transactions/TransactionRepository.js";
-import { UserRepository } from "../users/UserRepository.js";
 import { SimulationConfigProvider } from "./SimulationConfigProvider.js";
 import { SimulationResultsService } from "./results/SimulationResultsService.js";
 import { SimulationMode } from "./types.js";
 import { SimulationDateProvider } from "./price/SimulationDateProvider.js";
+import { ContainerIdentifiers } from "../core/Container/ContainerIdentifiers.js";
+import { IAlgorithmConfigProvider } from "../algorithms/types.js";
 
 
 @injectable()
@@ -22,6 +19,7 @@ export class Simulator {
     private readonly simulationConfigProvider: SimulationConfigProvider,
     private readonly simulationResultsService: SimulationResultsService,
     private readonly simulationDateProvider: SimulationDateProvider,
+    @multiInject(ContainerIdentifiers.TradingAlgorithmConfigProviders) private readonly algorithmConfigProviders: IAlgorithmConfigProvider[],
   ) { }
 
   public async simulate(): Promise<void> {
@@ -32,8 +30,11 @@ export class Simulator {
   }
 
   private async simulateOnce(): Promise<void> {
-    // Prepare simulation
+    // Reset data
     await this.simulationDateProvider.resetDate();
+    this.algorithmConfigProviders.forEach(p => p.randomizeConfig());
+
+    // Prepare simulation
     const asset = await this.simulationConfigProvider.getAsset();
     const prepResult: { userId: string } = await this.simulationPreparer.prepareSimulation();
 

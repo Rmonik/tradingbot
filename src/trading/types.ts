@@ -13,7 +13,3 @@ export interface IBalance {
   fiat: number;
   modifiedOn: Date;
 }
-
-export enum TradingAlgorithm {
-  BasicBuyLowSellHighV1 = "BasicBuyLowSellHighV1"
-}

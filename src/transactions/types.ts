@@ -22,12 +22,8 @@ export interface ITransactionExecutor {
   makeTransaction(userId: string, order: IOrder, pricePoint: IPricePoint): Promise<void>;
 }
 
-export interface IAlgorithmConfig {
-  [key: string]: (string | number)
-}
 
-export interface ITradingAlgorithm {
-  getConfig(): IAlgorithmConfig;
-  determineTransaction(currentPrice: number, wallet: number, fiat: number, lastTransaction: ITransaction | null): IOrder | null;
-  describeAlgorithm(): string;
+
+export enum TradingAlgorithm {
+  BasicBuyLowSellHighV1 = "BasicBuyLowSellHighV1"
 }

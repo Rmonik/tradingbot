@@ -52,7 +52,7 @@ export class TransactionExecutorSimulation implements ITransactionExecutor {
       const newFiat = oldBalance.fiat - totalPrice - fees.taker * totalPrice;
       
       if(newFiat < 0) {
-        throw new Error("Buy order cannot be completed: Not enough fiat");
+        throw new Error(`Buy order cannot be completed: Not enough fiat. Trying to buy ${totalPrice} worth plus ${fees.taker * totalPrice} fee with only ${oldBalance.fiat}`);
       }
 
       return { fiat: newFiat, wallet: newWallet, modifiedOn: this.dateService.getNow() };

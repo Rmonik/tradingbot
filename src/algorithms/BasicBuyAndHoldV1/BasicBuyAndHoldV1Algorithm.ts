@@ -1,40 +1,22 @@
 import { inject, injectable } from "inversify";
-import { Null } from "../utils/types.js";
-import { isDefined } from "../utils/TypeUtils.js";
-import { ITransaction, IOrder, TransactionType, ITradingAlgorithm } from "./types.js";
-import { ResolutionMode } from "../core/types.js";
-import { ContainerIdentifiers } from "../core/Container/ContainerIdentifiers.js";
-import { SimulationConfigProvider } from "../simulation/SimulationConfigProvider.js";
-import { SimulationMode } from "../simulation/types.js";
+import { ITradingAlgorithm } from "../types.js";
+import { IBasicBuyAndHoldV1Config } from "./types.js";
+import { BasicBuyAndHoldV1ConfigProvider } from "./BasicBuyAndHoldV1ConfigProvider.js";
+import { ITransaction, IOrder, TransactionType } from "../../transactions/types.js";
+import { Null } from "../../utils/types.js";
+import { isDefined } from "../../utils/TypeUtils.js";
 
 
 @injectable()
 export class BasicBuyAndHoldV1Algorithm implements ITradingAlgorithm {
 
-  public constructor(
-    @inject(ContainerIdentifiers.ResulotionMode) private readonly resolutionMode: ResolutionMode,
-    private readonly simulationConfigProvider: SimulationConfigProvider,
-  ) {
 
-  }
+  public constructor (
+    private readonly configProvider: BasicBuyAndHoldV1ConfigProvider,
+  ) {}
 
-  public getConfig() {
-    if (this.resolutionMode === ResolutionMode.Simulation && this.simulationConfigProvider.getSimulationMode() === SimulationMode.Randomized) return {
-      initialBuyin: Math.random(),
-      sellTreshold: Math.random() * 0.5,
-      sellAmount: Math.random() * 0.5,
-      buyTreshold: Math.random() * 0.5,
-      buyAmount: Math.random() * 0.5,
-    }
-    
-    
-      return {
-    initialBuyin: 0.6,
-    sellTreshold: 0.10,
-    sellAmount: 0.05,
-    buyTreshold: 0.05,
-    buyAmount: 0.05,
-    }
+  public getConfig(): IBasicBuyAndHoldV1Config {
+    return this.configProvider.getConfig();
   } 
 
   public describeAlgorithm(): string {
@@ -72,3 +54,4 @@ export class BasicBuyAndHoldV1Algorithm implements ITradingAlgorithm {
   }
   
 }
+

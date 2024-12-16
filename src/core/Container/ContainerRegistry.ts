@@ -1,5 +1,4 @@
 import { Container } from "inversify";
-import { BasicBuyAndHoldV1Algorithm } from "../../transactions/BasicBuyAndHoldV1Algorithm.js";
 import { Cron } from "../Cron.js";
 import { CsvIngestor } from "../CsvIngestor.js";
 import { Database } from "../Database.js";
@@ -11,6 +10,7 @@ import { TransactionRepository } from "../../transactions/TransactionRepository.
 import { registerTaxServices } from "../../tax/registry.js";
 import { registerTradingServices } from "../../trading/registry.js";
 import { registerUserServices } from "../../users/registry.js";
+import { registerAlgorithmServices } from "../../algorithms/registry.js";
 
 
 
@@ -28,4 +28,6 @@ export function registerContainerServices(container: Container) {
   registerTaxServices(container);
   registerTradingServices(container);
   registerUserServices(container);
+  registerTradingServices(container);
+  registerAlgorithmServices(container);
 }
