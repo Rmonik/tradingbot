@@ -1,5 +1,5 @@
 import { inject, injectable } from "inversify";
-import { IFee } from "./types.js";
+import { IFee, ISimulationInterval } from "./types.js";
 import { IBalance, TradingAlgorithm } from "../trading/types.js";
 import { Asset } from "../core/types.js";
 import { DateService } from "../core/DateService.js";
@@ -28,11 +28,27 @@ export class SimulationConfigProvider {
     return Asset.BTC;
   }
  
-  public getSimulationInterval(): { start: Date, end: Date } {
+  public getSimulationInterval(): ISimulationInterval {
+    // return {
+    //   name: "long term",
+    //   start: new Date("2017-01-01T00:00:00Z"),
+    //   end: new Date("2023-01-02T00:00:00Z"),
+    // }
+    // return {
+    //   name: "1y bull",
+    //   start: new Date("2020-04-17T00:00:00Z"),
+    //   end: new Date("2021-04-17T00:00:00Z"),
+    // }
     return {
-      start: new Date("2017-01-01T00:00:00Z"),
-      end: new Date("2023-01-02T00:00:00Z"),
+      name: "1y bear",
+      start: new Date("2021-10-21T00:00:00Z"),
+      end: new Date("2022-10-21T00:00:00Z"),
     }
+    // return {
+    //   name: "1y static",
+    //   start: new Date("2021-02-06T00:00:00Z"),
+    //   end: new Date("2022-02-26T00:00:00Z"),
+    // }
   }
 
   public getAlgorithm(): TradingAlgorithm {

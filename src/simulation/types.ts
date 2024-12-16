@@ -1,5 +1,3 @@
-import { ITaxCalculationResult } from "../tax/types.js";
-import { IBalance, TradingAlgorithm } from "../trading/types.js";
 
 
 export interface IFee {
@@ -7,3 +5,8 @@ export interface IFee {
   taker: number,
 }
 
+export interface ISimulationInterval {
+  name: string,
+  start: Date,
+  end: Date,
+}

@@ -12,8 +12,9 @@ import { UserRepository } from "../../users/UserRepository.js";
 import { isDefined } from "../../utils/TypeUtils.js";
 import { TaxCalculator } from "../../tax/TaxCalculator.js";
 import { TransactionRepository } from "../../transactions/TransactionRepository.js";
-import { ITradingAlgorithm, ITransaction, TransactionType } from "../../transactions/types.js";
+import { IAlgorithmConfig, ITradingAlgorithm, ITransaction, TransactionType } from "../../transactions/types.js";
 import { ContainerIdentifiers } from "../../core/Container/ContainerIdentifiers.js";
+import { ISimulationInterval } from "../types.js";
 
 
 @injectable()
@@ -45,22 +46,23 @@ export class SimulationResultsService {
         const taxResult = this.taxCalculator.calculateTax(transactions);
 
         // Calculate the results
-        const result = this.calculateSimulationResults(initialBalance, user.balance, firstPricePoint, lastPricePoint, transactions, taxResult, this.tradingAlgorithmName, this.tradingAlgorithm.describeAlgorithm());
+        const result = this.calculateSimulationResults(initialBalance, user.balance, firstPricePoint, lastPricePoint, transactions, taxResult, this.tradingAlgorithmName, this.tradingAlgorithm.describeAlgorithm(), this.simulationConfigProvider.getSimulationInterval(), this.tradingAlgorithm.config);
 
         // Store the results
         await this.simulationResultsRepository.insert(result);
 
         // Prune the other simulation data data
-        await this.pruneSimulationData();
+        await this.pruneSimulationData(user.id);
 
         return result;
     }
 
-    private calculateSimulationResults(initialBalance: IBalance, finalBalance: IBalance, pricePointFirst: IPricePoint, pricePointLast: IPricePoint, transactions: ITransaction[], taxResult: ITaxCalculationResult, tradingAlgorithmName: TradingAlgorithm, tradingAlgorithmDescription: string): ISimulationResult {
+    private calculateSimulationResults(initialBalance: IBalance, finalBalance: IBalance, pricePointFirst: IPricePoint, pricePointLast: IPricePoint, transactions: ITransaction[], taxResult: ITaxCalculationResult, tradingAlgorithmName: TradingAlgorithm, tradingAlgorithmDescription: string, simulationInterval: ISimulationInterval, algorithmConfig: IAlgorithmConfig): ISimulationResult {
         const valueOnDayOne = initialBalance.fiat + (initialBalance.wallet * pricePointFirst.price);
         const valueOnLastDay = finalBalance.fiat + (finalBalance.wallet * pricePointLast.price);
         const totalAssetsIfHodl = initialBalance.wallet + (initialBalance.fiat / pricePointFirst.price);
-        const valueOnLastDayIfHodl = totalAssetsIfHodl * pricePointLast.price;
+        const valueOnLastDayIfHodl = totalAssetsIfHodl * pricePointLast.price * (1 - this.simulationConfigProvider.getFee().taker * 2);
+        const holdFactor = valueOnLastDayIfHodl / valueOnDayOne;
 
         return {
             finalBalance: {
@@ -68,6 +70,7 @@ export class SimulationResultsService {
                 fiat: finalBalance.fiat,
                 valueOnFinalDay: valueOnLastDay,
                 valueIncreaseFactor: valueOnLastDay / valueOnDayOne,
+                holdIncreaseFactor: holdFactor,
                 valueIncreaseComparedToHodlFactor: valueOnLastDay / valueOnLastDayIfHodl,
             },
             taxes: {
@@ -77,22 +80,24 @@ export class SimulationResultsService {
             },
             algorithm: {
                 name: tradingAlgorithmName,
-                description: tradingAlgorithmDescription
+                description: tradingAlgorithmDescription,
+                config: algorithmConfig,
             },
             transactions: {
                 totalAmount: transactions.length,
                 buysAmount: transactions.filter(transaction => transaction.type === TransactionType.BUY).length,
                 sellsAmount: transactions.filter(transaction => transaction.type === TransactionType.SELL).length,
-            }
-
+            },
+            period: simulationInterval,
 
         }
     }
 
-    private async pruneSimulationData(): Promise<void> {
+    private async pruneSimulationData(userId: string): Promise<void> {
         if(this.resolutionMode !== ResolutionMode.Simulation) throw new Error("Warning: Trying to run simulation clean up in production mode. Nothing was deleted");
-        await this.transactionsRepository.deleteAll();
+        await this.transactionsRepository.deleteAllButFromUser(userId);
         await this.usersRepository.deleteAll();
     }
 
+    
 } 

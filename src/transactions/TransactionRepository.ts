@@ -28,4 +28,8 @@ export class TransactionRepository {
     await this.db.execute(this.collection, col => col.deleteMany());
   }
 
+  public async deleteAllButFromUser(userId: string): Promise<void> {
+    await this.db.execute(this.collection, col => col.deleteMany({ userId: {$ne: new ObjectId(userId)}}));
+  }
+
 }
