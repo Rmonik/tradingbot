@@ -9,8 +9,8 @@ export interface IAlgorithmConfig {
   [key: string]: any
 }
 
-export interface ITradingAlgorithm {
+export interface IAlgorithm {
   getConfig(): IAlgorithmConfig;
-  determineTransaction(currentPrice: number, wallet: number, fiat: number, lastTransaction: ITransaction | null): IOrder | null;
+  determineTransaction(currentPrice: number, wallet: number, fiat: number, transactionHistory: ITransaction[]): IOrder | null;
   describeAlgorithm(): string;
 }

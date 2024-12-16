@@ -25,5 +25,6 @@ export interface ITransactionExecutor {
 
 
 export enum TradingAlgorithm {
-  BasicBuyLowSellHighV1 = "BasicBuyLowSellHighV1"
+  BasicBuyLowSellHighV1 = "BasicBuyLowSellHighV1",
+  DynamicBuyLowSellHighV1 = "DynamicBuyLowSellHighV1"
 }

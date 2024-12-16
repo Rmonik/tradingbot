@@ -6,7 +6,7 @@ import { isDefined } from "../utils/TypeUtils.js";
 import { ITrader, IPriceChecker, IBalance } from "./types.js";
 import { UserRepository } from "../users/UserRepository.js";
 import { Asset } from "../core/types.js";
-import { ITradingAlgorithm } from "../algorithms/types.js";
+import { IAlgorithm } from "../algorithms/types.js";
 
 
 @injectable()
@@ -14,7 +14,7 @@ export class Trader implements ITrader {
 
   public constructor(
     @inject(ContainerIdentifiers.PriceChecker) private readonly priceChecker: IPriceChecker,
-    @inject(ContainerIdentifiers.TradingAlgorithm) private readonly transactionDeterminator: ITradingAlgorithm,
+    @inject(ContainerIdentifiers.TradingAlgorithm) private readonly transactionDeterminator: IAlgorithm,
     @inject(ContainerIdentifiers.TransactionExecutor) private readonly transactionExecutor: ITransactionExecutor,
     private readonly transactionRepository: TransactionRepository,
     private readonly userRepository: UserRepository,

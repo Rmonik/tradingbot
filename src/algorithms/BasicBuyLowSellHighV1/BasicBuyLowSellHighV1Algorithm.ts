@@ -1,18 +1,19 @@
 import { inject, injectable } from "inversify";
-import { ITradingAlgorithm } from "../types.js";
+import { IAlgorithm } from "../types.js";
 import { IBasicBuyAndHoldV1Config } from "./types.js";
-import { BasicBuyAndHoldV1ConfigProvider } from "./BasicBuyAndHoldV1ConfigProvider.js";
+import { BasicBuyLowSellHighV1ConfigProvider } from "./BasicBuyLowSellHighV1ConfigProvider.js";
 import { ITransaction, IOrder, TransactionType } from "../../transactions/types.js";
 import { Null } from "../../utils/types.js";
 import { isDefined } from "../../utils/TypeUtils.js";
+import { getLastTransaction } from "../utils.js";
 
 
 @injectable()
-export class BasicBuyAndHoldV1Algorithm implements ITradingAlgorithm {
+export class BasicBuyLowSellHighV1Algorithm implements IAlgorithm {
 
 
   public constructor (
-    private readonly configProvider: BasicBuyAndHoldV1ConfigProvider,
+    private readonly configProvider: BasicBuyLowSellHighV1ConfigProvider,
   ) {}
 
   public getConfig(): IBasicBuyAndHoldV1Config {
@@ -27,8 +28,8 @@ export class BasicBuyAndHoldV1Algorithm implements ITradingAlgorithm {
     );
   }
 
-  public determineTransaction(currentPrice: number, wallet: number, fiat: number, lastTransaction: Null<ITransaction>): Null<IOrder> {
-  
+  public determineTransaction(currentPrice: number, wallet: number, fiat: number, transactionHistory: ITransaction[]): Null<IOrder> {
+    const lastTransaction = getLastTransaction(transactionHistory);
     // Initial buy
     if(!isDefined(lastTransaction)) return {
       type: TransactionType.BUY,

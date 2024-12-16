@@ -26,6 +26,7 @@ export class Simulator {
     const simulationLoops = this.simulationConfigProvider.getSimulationMode() === SimulationMode.Once ? 1 : this.simulationConfigProvider.getLoopsForRandomizedMode();
     for(let i = 0; i < simulationLoops; i++) {
       await this.simulateOnce();
+      console.log(`Done with simulation ${i+1}/${simulationLoops}`);
     }
   }
 

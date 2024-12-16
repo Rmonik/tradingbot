@@ -15,7 +15,7 @@ import { TransactionRepository } from "../../transactions/TransactionRepository.
 import { ITransaction, TradingAlgorithm, TransactionType } from "../../transactions/types.js";
 import { ContainerIdentifiers } from "../../core/Container/ContainerIdentifiers.js";
 import { ISimulationInterval } from "../types.js";
-import { IAlgorithmConfig, ITradingAlgorithm } from "../../algorithms/types.js";
+import { IAlgorithmConfig, IAlgorithm } from "../../algorithms/types.js";
 
 
 @injectable()
@@ -29,7 +29,7 @@ export class SimulationResultsService {
         private readonly taxCalculator: TaxCalculator,
         private readonly transactionsRepository: TransactionRepository,
         @inject(ContainerIdentifiers.TradingAlgorithmName) private readonly tradingAlgorithmName: TradingAlgorithm,
-        @inject(ContainerIdentifiers.TradingAlgorithm) private readonly tradingAlgorithm: ITradingAlgorithm,
+        @inject(ContainerIdentifiers.TradingAlgorithm) private readonly tradingAlgorithm: IAlgorithm,
         @inject(ContainerIdentifiers.ResulotionMode) private readonly resolutionMode: ResolutionMode,
     ) { }
 

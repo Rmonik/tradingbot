@@ -1,16 +1,10 @@
-import { inject, injectable } from "inversify";
+import { injectable } from "inversify";
 import { IAlgorithmConfigProvider, IAlgorithmConfig } from "../types.js";
 import { IBasicBuyAndHoldV1Config } from "./types.js";
-import { ContainerIdentifiers } from "../../core/Container/ContainerIdentifiers.js";
-import { ResolutionMode } from "../../core/types.js";
-import { SimulationConfigProvider } from "../../simulation/SimulationConfigProvider.js";
+
 
 @injectable()
-export class BasicBuyAndHoldV1ConfigProvider implements IAlgorithmConfigProvider {
-
-    public constructor(    
-        @inject(ContainerIdentifiers.ResulotionMode) private readonly resolutionMode: ResolutionMode,
-        private readonly simulationConfigProvider: SimulationConfigProvider) {}
+export class BasicBuyLowSellHighV1ConfigProvider implements IAlgorithmConfigProvider {
 
     private config: IBasicBuyAndHoldV1Config = {
         initialBuyin: 0.5,

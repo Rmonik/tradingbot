@@ -43,21 +43,21 @@ export class SimulationConfigProvider {
     //   start: new Date("2017-01-01T00:00:00Z"),
     //   end: new Date("2023-01-02T00:00:00Z"),
     // }
-    return {
-      name: "1y bull",
-      start: new Date("2020-04-17T00:00:00Z"),
-      end: new Date("2021-04-17T00:00:00Z"),
-    }
+    // return {
+    //   name: "1y bull",
+    //   start: new Date("2020-04-17T00:00:00Z"),
+    //   end: new Date("2021-04-17T00:00:00Z"),
+    // }
     // return {
     //   name: "1y bear",
     //   start: new Date("2021-10-21T00:00:00Z"),
     //   end: new Date("2022-10-21T00:00:00Z"),
     // }
-    // return {
-    //   name: "1y static",
-    //   start: new Date("2021-02-06T00:00:00Z"),
-    //   end: new Date("2022-02-26T00:00:00Z"),
-    // }
+    return {
+      name: "1y static",
+      start: new Date("2021-02-06T00:00:00Z"),
+      end: new Date("2022-02-26T00:00:00Z"),
+    }
   }
 
   public getAlgorithm(): TradingAlgorithm {
