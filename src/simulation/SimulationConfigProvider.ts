@@ -11,7 +11,7 @@ export class SimulationConfigProvider {
   public constructor(private readonly dateService: DateService) { }
 
   public getSimulationMode(): SimulationMode {
-    return SimulationMode.Randomized;
+    return SimulationMode.Once;
   }
 
   public getLoopsForRandomizedMode(): number {
@@ -61,6 +61,6 @@ export class SimulationConfigProvider {
   }
 
   public getAlgorithm(): TradingAlgorithm {
-    return TradingAlgorithm.BasicBuyLowSellHighV1;
+    return TradingAlgorithm.DynamicBuyLowSellHighV1;
   }
 }

@@ -1,4 +1,4 @@
-import { inject, injectable, tagged } from "inversify";
+import { inject, injectable } from "inversify";
 import { ContainerIdentifiers } from "../core/Container/ContainerIdentifiers.js";
 import { TransactionRepository } from "../transactions/TransactionRepository.js";
 import { ITransactionExecutor } from "../transactions/types.js";
@@ -32,10 +32,10 @@ export class Trader implements ITrader {
     const balance: IBalance = user.balance;
 
     // Check last transaction
-    const lastTransaction = await this.transactionRepository.getLastTransaction(userId);
+    const allTransactions = await this.transactionRepository.getAllTransactions(userId);
 
     // Make order
-    const order = await this.transactionDeterminator.determineTransaction(pricePoint.price, balance.wallet, balance.fiat, lastTransaction);
+    const order = await this.transactionDeterminator.determineTransaction(pricePoint.price, balance.wallet, balance.fiat, allTransactions);
     if(isDefined(order)) await this.transactionExecutor.makeTransaction(userId, order, pricePoint);
 
   }
