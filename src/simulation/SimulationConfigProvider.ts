@@ -61,6 +61,6 @@ export class SimulationConfigProvider {
   }
 
   public getAlgorithm(): TradingAlgorithm {
-    return TradingAlgorithm.DynamicBuyLowSellHighV1;
+    return TradingAlgorithm.BasicBuyLowSellHighNoRepeatsV1;
   }
 }

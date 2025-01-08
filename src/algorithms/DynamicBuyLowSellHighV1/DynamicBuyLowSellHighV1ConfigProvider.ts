@@ -1,7 +1,9 @@
+import { injectable } from "inversify";
 import { getRandomNumberBetween } from "../../utils/RandomUtils.js";
 import { IAlgorithmConfigProvider } from "../types.js";
 import { DynamicBuyLowSellHighV1Config } from "./types.js";
 
+@injectable()
 export class DynamicBuyLowSellHighV1ConfigProvider implements IAlgorithmConfigProvider {
 
     private config:DynamicBuyLowSellHighV1Config  = {

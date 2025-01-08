@@ -23,17 +23,18 @@ export class Simulator {
   ) { }
 
   public async simulate(): Promise<void> {
-    const simulationLoops = this.simulationConfigProvider.getSimulationMode() === SimulationMode.Once ? 1 : this.simulationConfigProvider.getLoopsForRandomizedMode();
+    const randomized = this.simulationConfigProvider.getSimulationMode() === SimulationMode.Randomized;
+    const simulationLoops = randomized ? this.simulationConfigProvider.getLoopsForRandomizedMode() : 1;
     for(let i = 0; i < simulationLoops; i++) {
-      await this.simulateOnce();
+      await this.simulateOnce(randomized);
       console.log(`Done with simulation ${i+1}/${simulationLoops}`);
     }
   }
 
-  private async simulateOnce(): Promise<void> {
+  private async simulateOnce(randomized: boolean): Promise<void> {
     // Reset data
     await this.simulationDateProvider.resetDate();
-    this.algorithmConfigProviders.forEach(p => p.randomizeConfig());
+    if (randomized) this.algorithmConfigProviders.forEach(p => p.randomizeConfig());
 
     // Prepare simulation
     const asset = await this.simulationConfigProvider.getAsset();

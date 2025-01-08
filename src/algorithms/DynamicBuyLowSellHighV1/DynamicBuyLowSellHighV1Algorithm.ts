@@ -1,3 +1,4 @@
+import { injectable } from "inversify";
 import { ITransaction, IOrder, TransactionType } from "../../transactions/types.js";
 import { isDefined } from "../../utils/TypeUtils.js";
 import { IAlgorithm, IAlgorithmConfig } from "../types.js";
@@ -5,7 +6,7 @@ import { getLastTransaction, howManyBuysSinceLastSell, howManySellsSinceLastBuy 
 import { DynamicBuyLowSellHighV1ConfigProvider } from "./DynamicBuyLowSellHighV1ConfigProvider.js";
 import { DynamicBuyLowSellHighV1Config } from "./types.js";
 
-
+@injectable()
 export class DynamicBuyLowSellHighV1Algorithm implements IAlgorithm {
 
     public constructor(
